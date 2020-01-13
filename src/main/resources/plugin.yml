@@ -1,0 +1,27 @@
+name: "${bukkit.plugin.name}"
+prefix: "${bukkit.plugin.prefix}"
+description: "${bukkit.plugin.description}"
+
+main: "${bukkit.plugin.main}"
+version: "${bukkit.plugin.version}"
+
+author: "SirBlobman"
+
+commands:
+  compressed-hearts:
+    description: "Main command for the CompressedHearts plugin."
+    usage: "/<command>"
+    permission: "compressed-hearts.command.compressed-hearts"
+    aliases:
+      - "compressedhearts"
+      - "chearts"
+      - "compressedh"
+      - "ch"
+
+  hp:
+    description: "Check your current health."
+    usage: "/<command> [player]"
+    permission: "compressed-hearts.command.hp"
+    aliases:
+      - "hearts"
+      - "health"
