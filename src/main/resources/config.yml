@@ -30,8 +30,13 @@ default-options:
   show-hearts: true
 
 messages:
+  # Health is displayed as a decimal, so what format should we use for it?
+  # (Hearts are always integer)
+  display-health-format: "0.00"
   display-health: "&2HP: &c{health}/{max_health}"
   display-hearts: "&c{hearts}/{max_hearts} &4&l\u2764"
+  display-health-wither: "&2HP: &0&k{health}&c/&0&k{max_health}"
+  display-hearts-wither: "&0&k{hearts}&c/&0&k{max_hearts} &0&l\u2764"
   display-absorption-health: "&e+ {absorb_health}"
   display-absorption-hearts: "&e+ {absorb_hearts} &6&l\u2764"
 

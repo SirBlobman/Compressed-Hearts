@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ListenerHealth extends BukkitRunnable implements Listener {
@@ -155,7 +156,9 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
     private String getMessage(Player player) {
         if(player == null) return "";
         FileConfiguration config = this.plugin.getConfig();
-        DecimalFormat format = new DecimalFormat("0.00");
+        
+        String healthFormat = config.getString("messages.display-health-format");
+        DecimalFormat format = new DecimalFormat(healthFormat == null ? "0.00" : healthFormat);
     
         SirBlobmanAPI api = this.plugin.getSirBlobmanAPI();
         NMS_Handler nmsHandler = api.getVersionHandler();
@@ -181,7 +184,7 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
             long absHearts = Math.round(absorption / 2.0D);
             String absHeartsString = Long.toString(absHearts);
             
-            String message = config.getString("messages.display-hearts");
+            String message = config.getString("messages.display-hearts" + (player.hasPotionEffect(PotionEffectType.WITHER) ? "-wither" : ""));
             message = message.replace("{hearts}", heartsString).replace("{max_hearts}", maxHeartsString);
             
             if(absHearts > 0) {
@@ -193,7 +196,7 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
             return message;
         }
     
-        String message = config.getString("messages.display-health");
+        String message = config.getString("messages.display-health" + (player.hasPotionEffect(PotionEffectType.WITHER) ? "-wither" : ""));
         message = message.replace("{health}", healthString).replace("{max_health}", maxHealthString);
     
         if(absorption > 0) {
