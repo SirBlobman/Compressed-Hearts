@@ -3,9 +3,9 @@ package com.SirBlobman.compressed.hearts.command;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import com.SirBlobman.api.SirBlobmanAPI;
+import com.SirBlobman.api.nms.AbstractNMS;
 import com.SirBlobman.api.nms.EntityHandler;
-import com.SirBlobman.api.nms.NMS_Handler;
+import com.SirBlobman.api.nms.MultiVersionHandler;
 import com.SirBlobman.api.nms.PlayerHandler;
 import com.SirBlobman.compressed.hearts.CompressedHearts;
 
@@ -66,10 +66,10 @@ public class CommandHP implements CommandExecutor {
     }
     
     private boolean checkSelf(Player player) {
-        SirBlobmanAPI api = this.plugin.getSirBlobmanAPI();
-        NMS_Handler nmsHandler = api.getVersionHandler();
-        PlayerHandler playerHandler = nmsHandler.getPlayerHandler();
-        EntityHandler entityHandler = nmsHandler.getEntityHandler();
+        MultiVersionHandler<CompressedHearts> nmsHandler = this.plugin.getMultiVersionHandler();
+        AbstractNMS nmsInterface = nmsHandler.getInterface();
+        PlayerHandler playerHandler = nmsInterface.getPlayerHandler();
+        EntityHandler entityHandler = nmsInterface.getEntityHandler();
         DecimalFormat format = new DecimalFormat("0.00");
     
         double health = player.getHealth();
@@ -100,10 +100,11 @@ public class CommandHP implements CommandExecutor {
     }
     
     private boolean checkOther(CommandSender sender, Player target) {
-        SirBlobmanAPI api = this.plugin.getSirBlobmanAPI();
-        NMS_Handler nmsHandler = api.getVersionHandler();
-        PlayerHandler playerHandler = nmsHandler.getPlayerHandler();
-        EntityHandler entityHandler = nmsHandler.getEntityHandler();
+        MultiVersionHandler<CompressedHearts> nmsHandler = this.plugin.getMultiVersionHandler();
+        AbstractNMS nmsInterface = nmsHandler.getInterface();
+        PlayerHandler playerHandler = nmsInterface.getPlayerHandler();
+        EntityHandler entityHandler = nmsInterface.getEntityHandler();
+    
         DecimalFormat format = new DecimalFormat("0.00");
     
         double health = target.getHealth();

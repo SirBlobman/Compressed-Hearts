@@ -4,8 +4,9 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 
 import com.SirBlobman.api.SirBlobmanAPI;
+import com.SirBlobman.api.nms.AbstractNMS;
 import com.SirBlobman.api.nms.EntityHandler;
-import com.SirBlobman.api.nms.NMS_Handler;
+import com.SirBlobman.api.nms.MultiVersionHandler;
 import com.SirBlobman.api.nms.PlayerHandler;
 import com.SirBlobman.api.nms.boss.bar.BossBarHandler;
 import com.SirBlobman.compressed.hearts.CompressedHearts;
@@ -13,6 +14,7 @@ import com.SirBlobman.compressed.hearts.configuration.DisplayType;
 import com.SirBlobman.compressed.hearts.scoreboard.ScoreboardUtil;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -160,10 +162,10 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
         String healthFormat = config.getString("messages.display-health-format");
         DecimalFormat format = new DecimalFormat(healthFormat == null ? "0.00" : healthFormat);
     
-        SirBlobmanAPI api = this.plugin.getSirBlobmanAPI();
-        NMS_Handler nmsHandler = api.getVersionHandler();
-        PlayerHandler playerHandler = nmsHandler.getPlayerHandler();
-        EntityHandler entityHandler = nmsHandler.getEntityHandler();
+        MultiVersionHandler<CompressedHearts> nmsHandler = this.plugin.getMultiVersionHandler();
+        AbstractNMS nmsInterface = nmsHandler.getInterface();
+        PlayerHandler playerHandler = nmsInterface.getPlayerHandler();
+        EntityHandler entityHandler = nmsInterface.getEntityHandler();
         
         double health = player.getHealth();
         String healthString = format.format(health);
@@ -192,8 +194,8 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
                 absMessage = absMessage.replace("{absorb_hearts}", absHeartsString);
                 message += absMessage;
             }
-            
-            return message;
+    
+            return ChatColor.translateAlternateColorCodes('&', message);
         }
     
         String message = config.getString("messages.display-health" + (player.hasPotionEffect(PotionEffectType.WITHER) ? "-wither" : ""));
@@ -205,7 +207,7 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
             message += absMessage;
         }
     
-        return message;
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
     
     private void checkDisplay(Player player) {
@@ -231,10 +233,11 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
     
     private void checkBossBar(Player player) {
         if(player == null) return;
-        
-        SirBlobmanAPI api = this.plugin.getSirBlobmanAPI();
-        NMS_Handler nmsHandler = api.getVersionHandler();
-        BossBarHandler bossBarHandler = nmsHandler.getBossBarHandler();
+    
+    
+        MultiVersionHandler<CompressedHearts> nmsHandler = this.plugin.getMultiVersionHandler();
+        AbstractNMS nmsInterface = nmsHandler.getInterface();
+        BossBarHandler bossBarHandler = nmsInterface.getBossBarHandler();
         
         String message = getMessage(player);
         bossBarHandler.updateBossBar(player, message, 1.0D, "BLUE", "SOLID");
@@ -243,9 +246,9 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
     private void checkActionBar(Player player) {
         if(player == null) return;
     
-        SirBlobmanAPI api = this.plugin.getSirBlobmanAPI();
-        NMS_Handler nmsHandler = api.getVersionHandler();
-        PlayerHandler playerHandler = nmsHandler.getPlayerHandler();
+        MultiVersionHandler<CompressedHearts> nmsHandler = this.plugin.getMultiVersionHandler();
+        AbstractNMS nmsInterface = nmsHandler.getInterface();
+        PlayerHandler playerHandler = nmsInterface.getPlayerHandler();
         
         String message = getMessage(player);
         playerHandler.sendActionBar(player, message);

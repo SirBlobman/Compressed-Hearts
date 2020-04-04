@@ -6,6 +6,7 @@ main: "${bukkit.plugin.main}"
 version: "${bukkit.plugin.version}"
 
 author: "SirBlobman"
+api-version: "1.13"
 
 commands:
   compressed-hearts:

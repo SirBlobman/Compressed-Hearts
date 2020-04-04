@@ -33,8 +33,10 @@ public class CommandCompressedHearts implements CommandExecutor {
             case "display": return displayCommand(sender, newArgs);
             case "reload": return reloadCommand(sender);
             
-            default: return false;
+            default: break;
         }
+        
+        return helpCommand(sender);
     }
     
     private String getConfigMessage(String path) {

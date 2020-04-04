@@ -1,7 +1,7 @@
 package com.SirBlobman.compressed.hearts.scoreboard;
 
-import com.SirBlobman.api.SirBlobmanAPI;
-import com.SirBlobman.api.nms.NMS_Handler;
+import com.SirBlobman.api.nms.AbstractNMS;
+import com.SirBlobman.api.nms.MultiVersionHandler;
 import com.SirBlobman.api.nms.ScoreboardHandler;
 import com.SirBlobman.compressed.hearts.CompressedHearts;
 
@@ -16,11 +16,11 @@ public final class ScoreboardUtil {
     private static final Objective objective = createObjective();
     
     private static Objective createObjective() {
-        JavaPlugin plugin = JavaPlugin.getPlugin(CompressedHearts.class);
-        SirBlobmanAPI api = SirBlobmanAPI.getInstance(plugin);
-    
-        NMS_Handler nmsHandler = api.getVersionHandler();
-        ScoreboardHandler scoreboardHandler = nmsHandler.getScoreboardHandler();
+        CompressedHearts plugin = JavaPlugin.getPlugin(CompressedHearts.class);
+        MultiVersionHandler<CompressedHearts> nmsHandler = plugin.getMultiVersionHandler();
+        
+        AbstractNMS nmsInterface = nmsHandler.getInterface();
+        ScoreboardHandler scoreboardHandler = nmsInterface.getScoreboardHandler();
         
         Objective objective = scoreboardHandler.createObjective(scoreboard, "comp_hearts", "dummy", "Hearts");
         objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
