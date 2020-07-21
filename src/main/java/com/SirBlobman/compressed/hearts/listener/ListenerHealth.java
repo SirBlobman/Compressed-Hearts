@@ -151,9 +151,13 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
     
     private void checkScale(Player player) {
         if(player == null) return;
-        if(shouldNotScaleHealth(player)) return;
+        if(shouldNotScaleHealth(player)) {
+            player.setHealthScaled(false);
+            return;
+        }
     
         player.setHealthScale(20.0D);
+        player.setHealthScaled(true);
     }
     
     private String getMessage(Player player) {
