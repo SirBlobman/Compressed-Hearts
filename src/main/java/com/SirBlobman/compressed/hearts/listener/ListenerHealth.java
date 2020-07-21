@@ -19,6 +19,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -26,8 +29,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class ListenerHealth extends BukkitRunnable implements Listener {
     private final CompressedHearts plugin;
@@ -190,7 +191,7 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
             message = message.replace("{hearts}", heartsString).replace("{max_hearts}", maxHeartsString);
             
             if(absHearts > 0) {
-                String absMessage = config.getString("messages.absorption-hearts");
+                String absMessage = config.getString("messages.display-absorption-hearts");
                 absMessage = absMessage.replace("{absorb_hearts}", absHeartsString);
                 message += absMessage;
             }
@@ -202,7 +203,7 @@ public class ListenerHealth extends BukkitRunnable implements Listener {
         message = message.replace("{health}", healthString).replace("{max_health}", maxHealthString);
     
         if(absorption > 0) {
-            String absMessage = config.getString("messages.absorption-health");
+            String absMessage = config.getString("messages.display-absorption-health");
             absMessage = absMessage.replace("{absorb_health}", absString);
             message += absMessage;
         }
