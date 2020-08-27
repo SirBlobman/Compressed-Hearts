@@ -111,7 +111,7 @@ public class DisplayTask extends BukkitRunnable {
         double maxHealth = entityHandler.getMaxHealth(player);
         String maxHealthString = decimalFormat.format(maxHealth);
 
-        String messagePath = (hasWitherEffect(player) ? "display.health-format" : "display.wither-health-format");
+        String messagePath = (hasWitherEffect(player) ? "display.wither-health-format" : "display.health-format");
         String messageFormat = languageManager.getMessageColored(player, messagePath);
         String message = messageFormat.replace("{health}", normalHealthString).replace("{max_health}", maxHealthString);
 
@@ -151,7 +151,7 @@ public class DisplayTask extends BukkitRunnable {
         long maxHearts = Math.round(maxHealth / 2.0D);
         String maxHeartsString = Long.toString(maxHearts);
 
-        String messagePath = (hasWitherEffect(player) ? "display.hearts-format" : "display.wither-hearts-format");
+        String messagePath = (hasWitherEffect(player) ? "display.wither-hearts-format" : "display.hearts-format");
         String messageFormat = languageManager.getMessageColored(player, messagePath);
         String message = messageFormat.replace("{hearts}", normalHeartsString).replace("{max_hearts}", maxHeartsString);
 

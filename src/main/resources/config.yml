@@ -1,6 +1,9 @@
 # Default Configuration for ${bukkit.plugin.prefix}
 # Made by SirBlobman for v${bukkit.plugin.version}
 
+# Should the plugin be allowed to check for updates?
+update-checker: true
+
 # These are the default health options for new players
 # If you give access to some commands, players can set their own values
 
