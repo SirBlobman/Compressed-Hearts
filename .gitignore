@@ -1,16 +1,20 @@
-# IntelliJ IDEA
-.idea/
-*.iml
-
-# Eclipse
-.settings/
-*.project
-*.classpath
-
-# Maven
-target/
-dependency-reduced-pom.xml
+# Mac OSX
+.DS_Store
 
 # Java
 *.class
 *.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse IDE
+.settings/
+bin/
+.classpath
+.project
+
+# Maven
+target/
+dependency-reduced-pom.xml
