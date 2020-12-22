@@ -10,7 +10,7 @@
     <description>A plugin that allows you to change the heart scale of your players</description>
     
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <spigot.version>1.8.8-R0.1-SNAPSHOT</spigot.version>
         
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -22,7 +22,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
         
         <bukkit.plugin.main>com.SirBlobman.compressed.hearts.HeartsPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>3.0.0</bukkit.plugin.version>
+        <bukkit.plugin.version>3.1.0</bukkit.plugin.version>
     </properties>
     
     <repositories>
@@ -58,6 +58,7 @@
     </dependencies>
     
     <build>
+        <defaultGoal>clean install</defaultGoal>
         <finalName>${bukkit.plugin.name}-${bukkit.plugin.version}</finalName>
         <resources>
             <resource>

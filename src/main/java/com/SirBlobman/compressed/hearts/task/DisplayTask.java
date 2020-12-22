@@ -3,12 +3,6 @@ package com.SirBlobman.compressed.hearts.task;
 import java.text.DecimalFormat;
 import java.util.Collection;
 
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.SirBlobman.api.configuration.ConfigurationManager;
 import com.SirBlobman.api.configuration.PlayerDataManager;
 import com.SirBlobman.api.language.LanguageManager;
@@ -18,20 +12,15 @@ import com.SirBlobman.api.nms.PlayerHandler;
 import com.SirBlobman.api.nms.bossbar.BossBarHandler;
 import com.SirBlobman.api.utility.Validate;
 import com.SirBlobman.compressed.hearts.HeartsPlugin;
+import com.SirBlobman.compressed.hearts.object.DisplayType;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class DisplayTask extends BukkitRunnable {
-    public enum DisplayType {
-        BOSS_BAR, ACTION_BAR;
-
-        public static DisplayType parse(String string) {
-            try {
-                String value = string.toUpperCase().replace('-', '_').replace(' ', '_');
-                return valueOf(value);
-            } catch(Exception ex) {
-                return null;
-            }
-        }
-    }
 
     private final HeartsPlugin plugin;
     public DisplayTask(HeartsPlugin plugin) {
@@ -124,7 +113,7 @@ public class DisplayTask extends BukkitRunnable {
         }
 
         DisplayType displayType = getDisplayType(player);
-        if(displayType == null) return;
+        if(displayType == null || displayType == DisplayType.NONE) return;
 
         if(displayType == DisplayType.ACTION_BAR) {
             playerHandler.sendActionBar(player, message);
@@ -165,7 +154,7 @@ public class DisplayTask extends BukkitRunnable {
         }
 
         DisplayType displayType = getDisplayType(player);
-        if(displayType == null) return;
+        if(displayType == null || displayType == DisplayType.NONE) return;
 
         if(displayType == DisplayType.ACTION_BAR) {
             playerHandler.sendActionBar(player, message);

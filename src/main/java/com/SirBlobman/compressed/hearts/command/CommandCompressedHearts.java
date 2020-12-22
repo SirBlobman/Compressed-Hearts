@@ -14,7 +14,7 @@ import com.SirBlobman.api.configuration.PlayerDataManager;
 import com.SirBlobman.api.language.LanguageManager;
 import com.SirBlobman.api.language.Replacer;
 import com.SirBlobman.compressed.hearts.HeartsPlugin;
-import com.SirBlobman.compressed.hearts.task.DisplayTask.DisplayType;
+import com.SirBlobman.compressed.hearts.object.DisplayType;
 
 public class CommandCompressedHearts extends Command {
     private final HeartsPlugin plugin;

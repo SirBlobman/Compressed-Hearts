@@ -12,7 +12,7 @@ update-checker: true
 # Default: true
 scale-health: true
 
-# Valid display types: BOSS_BAR, ACTION_BAR
+# Valid display types: BOSS_BAR, ACTION_BAR, NONE
 # Default: BOSS_BAR
 display-type: BOSS_BAR
 
