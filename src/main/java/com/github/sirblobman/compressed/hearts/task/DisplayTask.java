@@ -1,4 +1,4 @@
-package com.SirBlobman.compressed.hearts.task;
+package com.github.sirblobman.compressed.hearts.task;
 
 import java.text.DecimalFormat;
 import java.util.Collection;
@@ -11,8 +11,8 @@ import com.SirBlobman.api.nms.MultiVersionHandler;
 import com.SirBlobman.api.nms.PlayerHandler;
 import com.SirBlobman.api.nms.bossbar.BossBarHandler;
 import com.SirBlobman.api.utility.Validate;
-import com.SirBlobman.compressed.hearts.HeartsPlugin;
-import com.SirBlobman.compressed.hearts.object.DisplayType;
+import com.github.sirblobman.compressed.hearts.HeartsPlugin;
+import com.github.sirblobman.compressed.hearts.object.DisplayType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;

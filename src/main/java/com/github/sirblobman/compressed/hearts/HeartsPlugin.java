@@ -1,4 +1,4 @@
-package com.SirBlobman.compressed.hearts;
+package com.github.sirblobman.compressed.hearts;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -9,10 +9,10 @@ import com.SirBlobman.api.configuration.PlayerDataManager;
 import com.SirBlobman.api.language.LanguageManager;
 import com.SirBlobman.api.nms.MultiVersionHandler;
 import com.SirBlobman.api.update.UpdateChecker;
-import com.SirBlobman.compressed.hearts.command.CommandCompressedHearts;
-import com.SirBlobman.compressed.hearts.command.CommandHP;
-import com.SirBlobman.compressed.hearts.listener.ListenerHealth;
-import com.SirBlobman.compressed.hearts.task.DisplayTask;
+import com.github.sirblobman.compressed.hearts.command.CommandCompressedHearts;
+import com.github.sirblobman.compressed.hearts.command.CommandHP;
+import com.github.sirblobman.compressed.hearts.listener.ListenerHealth;
+import com.github.sirblobman.compressed.hearts.task.DisplayTask;
 import com.SirBlobman.core.CorePlugin;
 
 public class HeartsPlugin extends JavaPlugin {

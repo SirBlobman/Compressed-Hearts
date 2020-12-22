@@ -1,4 +1,4 @@
-package com.SirBlobman.compressed.hearts.object;
+package com.github.sirblobman.compressed.hearts.object;
 
 public enum DisplayType {
     BOSS_BAR, ACTION_BAR, NONE;

@@ -1,4 +1,4 @@
-package com.SirBlobman.compressed.hearts.command;
+package com.github.sirblobman.compressed.hearts.command;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,8 +13,8 @@ import com.SirBlobman.api.configuration.ConfigurationManager;
 import com.SirBlobman.api.configuration.PlayerDataManager;
 import com.SirBlobman.api.language.LanguageManager;
 import com.SirBlobman.api.language.Replacer;
-import com.SirBlobman.compressed.hearts.HeartsPlugin;
-import com.SirBlobman.compressed.hearts.object.DisplayType;
+import com.github.sirblobman.compressed.hearts.HeartsPlugin;
+import com.github.sirblobman.compressed.hearts.object.DisplayType;
 
 public class CommandCompressedHearts extends Command {
     private final HeartsPlugin plugin;

@@ -1,4 +1,4 @@
-package com.SirBlobman.compressed.hearts.listener;
+package com.github.sirblobman.compressed.hearts.listener;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,8 +14,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.SirBlobman.api.configuration.PlayerDataManager;
 import com.SirBlobman.api.utility.Validate;
-import com.SirBlobman.compressed.hearts.HeartsPlugin;
-import com.SirBlobman.compressed.hearts.task.DisplayTask;
+import com.github.sirblobman.compressed.hearts.HeartsPlugin;
+import com.github.sirblobman.compressed.hearts.task.DisplayTask;
 
 public class ListenerHealth implements Listener {
     private final HeartsPlugin plugin;

@@ -1,4 +1,4 @@
-package com.SirBlobman.compressed.hearts.command;
+package com.github.sirblobman.compressed.hearts.command;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import com.SirBlobman.api.language.LanguageManager;
 import com.SirBlobman.api.nms.EntityHandler;
 import com.SirBlobman.api.nms.MultiVersionHandler;
 import com.SirBlobman.api.nms.PlayerHandler;
-import com.SirBlobman.compressed.hearts.HeartsPlugin;
+import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 
 public class CommandHP extends PlayerCommand {
     private final HeartsPlugin plugin;
