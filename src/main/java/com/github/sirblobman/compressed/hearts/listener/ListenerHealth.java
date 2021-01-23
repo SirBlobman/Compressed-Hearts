@@ -12,8 +12,8 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.SirBlobman.api.configuration.PlayerDataManager;
-import com.SirBlobman.api.utility.Validate;
+import com.github.sirblobman.api.configuration.PlayerDataManager;
+import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 import com.github.sirblobman.compressed.hearts.task.DisplayTask;
 

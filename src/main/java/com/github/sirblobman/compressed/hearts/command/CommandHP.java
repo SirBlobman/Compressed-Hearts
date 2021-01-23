@@ -7,11 +7,11 @@ import java.util.Set;
 
 import org.bukkit.entity.Player;
 
-import com.SirBlobman.api.command.PlayerCommand;
-import com.SirBlobman.api.language.LanguageManager;
-import com.SirBlobman.api.nms.EntityHandler;
-import com.SirBlobman.api.nms.MultiVersionHandler;
-import com.SirBlobman.api.nms.PlayerHandler;
+import com.github.sirblobman.api.command.PlayerCommand;
+import com.github.sirblobman.api.language.LanguageManager;
+import com.github.sirblobman.api.nms.EntityHandler;
+import com.github.sirblobman.api.nms.MultiVersionHandler;
+import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 
 public class CommandHP extends PlayerCommand {

@@ -4,16 +4,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.SirBlobman.api.configuration.ConfigurationManager;
-import com.SirBlobman.api.configuration.PlayerDataManager;
-import com.SirBlobman.api.language.LanguageManager;
-import com.SirBlobman.api.nms.MultiVersionHandler;
-import com.SirBlobman.api.update.UpdateChecker;
+import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.configuration.PlayerDataManager;
+import com.github.sirblobman.api.core.CorePlugin;
+import com.github.sirblobman.api.language.LanguageManager;
+import com.github.sirblobman.api.nms.MultiVersionHandler;
+import com.github.sirblobman.api.update.UpdateChecker;
 import com.github.sirblobman.compressed.hearts.command.CommandCompressedHearts;
 import com.github.sirblobman.compressed.hearts.command.CommandHP;
 import com.github.sirblobman.compressed.hearts.listener.ListenerHealth;
 import com.github.sirblobman.compressed.hearts.task.DisplayTask;
-import com.SirBlobman.core.CorePlugin;
 
 public class HeartsPlugin extends JavaPlugin {
     private final ConfigurationManager configurationManager;

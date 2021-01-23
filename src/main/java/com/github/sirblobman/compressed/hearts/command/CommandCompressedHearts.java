@@ -8,11 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import com.SirBlobman.api.command.Command;
-import com.SirBlobman.api.configuration.ConfigurationManager;
-import com.SirBlobman.api.configuration.PlayerDataManager;
-import com.SirBlobman.api.language.LanguageManager;
-import com.SirBlobman.api.language.Replacer;
+import com.github.sirblobman.api.command.Command;
+import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.configuration.PlayerDataManager;
+import com.github.sirblobman.api.language.LanguageManager;
+import com.github.sirblobman.api.language.Replacer;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 import com.github.sirblobman.compressed.hearts.object.DisplayType;
 
