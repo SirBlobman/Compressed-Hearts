@@ -17,7 +17,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
-        <bukkit.plugin.name>${project.artifactId}</bukkit.plugin.name>
+        <bukkit.plugin.name>CompressedHearts</bukkit.plugin.name>
         <bukkit.plugin.prefix>${project.name}</bukkit.plugin.prefix>
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
         
