@@ -91,7 +91,8 @@ public class DisplayTask extends BukkitRunnable {
         PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
         EntityHandler entityHandler = multiVersionHandler.getEntityHandler();
 
-        String decimalFormatString = languageManager.getMessage(player, "display.decimal-format");
+        String decimalFormatString = languageManager.getMessage(player, "display.decimal-format",
+                null, false);
         DecimalFormat decimalFormat = new DecimalFormat(decimalFormatString);
 
         double normalHealth = player.getHealth();
@@ -101,14 +102,17 @@ public class DisplayTask extends BukkitRunnable {
         String maxHealthString = decimalFormat.format(maxHealth);
 
         String messagePath = (hasWitherEffect(player) ? "display.wither-health-format" : "display.health-format");
-        String messageFormat = languageManager.getMessageColored(player, messagePath);
-        String message = messageFormat.replace("{health}", normalHealthString).replace("{max_health}", maxHealthString);
+        String messageFormat = languageManager.getMessage(player, messagePath, null, true);
+        String message = messageFormat.replace("{health}", normalHealthString)
+                .replace("{max_health}", maxHealthString);
 
         double absorptionHealth = playerHandler.getAbsorptionHearts(player);
         if(absorptionHealth > 0.0D) {
             String absorptionHealthString = decimalFormat.format(absorptionHealth);
-            String absorptionHealthFormat = languageManager.getMessageColored(player,"display.absorption-health-format");
-            String absorptionHealthMessage = absorptionHealthFormat.replace("{absorb_health}", absorptionHealthString);
+            String absorptionHealthFormat = languageManager.getMessage(player,"display.absorption-health-format",
+                    null, true);
+            String absorptionHealthMessage = absorptionHealthFormat.replace("{absorb_health}",
+                    absorptionHealthString);
             message += absorptionHealthMessage;
         }
 
@@ -141,15 +145,18 @@ public class DisplayTask extends BukkitRunnable {
         String maxHeartsString = Long.toString(maxHearts);
 
         String messagePath = (hasWitherEffect(player) ? "display.wither-hearts-format" : "display.hearts-format");
-        String messageFormat = languageManager.getMessageColored(player, messagePath);
-        String message = messageFormat.replace("{hearts}", normalHeartsString).replace("{max_hearts}", maxHeartsString);
+        String messageFormat = languageManager.getMessage(player, messagePath, null, true);
+        String message = messageFormat.replace("{hearts}", normalHeartsString)
+                .replace("{max_hearts}", maxHeartsString);
 
         double absorptionHealth = playerHandler.getAbsorptionHearts(player);
         long absorptionHearts = Math.round(absorptionHealth / 2.0D);
         if(absorptionHearts > 0) {
             String absorptionHeartsString = Long.toString(absorptionHearts);
-            String absorptionHeartsFormat = languageManager.getMessageColored(player,"display.absorption-hearts-format");
-            String absorptionHeartsMessage = absorptionHeartsFormat.replace("{absorb_hearts}", absorptionHeartsString);
+            String absorptionHeartsFormat = languageManager.getMessage(player,"display.absorption-hearts-format",
+                    null, true);
+            String absorptionHeartsMessage = absorptionHeartsFormat
+                    .replace("{absorb_hearts}", absorptionHeartsString);
             message += absorptionHeartsMessage;
         }
 

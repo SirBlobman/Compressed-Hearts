@@ -14,6 +14,8 @@ import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 
+import org.jetbrains.annotations.NotNull;
+
 public class CommandHP extends PlayerCommand {
     private final HeartsPlugin plugin;
     public CommandHP(HeartsPlugin plugin) {
@@ -21,6 +23,7 @@ public class CommandHP extends PlayerCommand {
         this.plugin = plugin;
     }
 
+    @NotNull
     @Override
     public LanguageManager getLanguageManager() {
         return this.plugin.getLanguageManager();
@@ -52,14 +55,16 @@ public class CommandHP extends PlayerCommand {
 
     private void showSelf(Player player) {
         LanguageManager languageManager = getLanguageManager();
-        String message = languageManager.getMessageColored(player, "command.hp.self-information");
+        String message = languageManager.getMessage(player, "command.hp.self-information",
+                null, true);
         String realMessage = replaceVariables(player, player, message);
         player.sendMessage(realMessage);
     }
 
     private void showOther(Player player, Player target) {
         LanguageManager languageManager = getLanguageManager();
-        String message = languageManager.getMessageColored(player, "command.hp.other-information");
+        String message = languageManager.getMessage(player, "command.hp.other-information",
+                null, true);
         String realMessage = replaceVariables(player, target, message);
         player.sendMessage(realMessage);
     }
@@ -70,7 +75,8 @@ public class CommandHP extends PlayerCommand {
         EntityHandler entityHandler = multiVersionHandler.getEntityHandler();
         PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
 
-        String decimalFormatString = languageManager.getMessage(player, "display.decimal-format");
+        String decimalFormatString = languageManager.getMessage(player, "display.decimal-format",
+                null, true);
         DecimalFormat decimalFormat = new DecimalFormat(decimalFormatString);
 
         double health = target.getHealth();
@@ -93,6 +99,7 @@ public class CommandHP extends PlayerCommand {
 
         return message.replace("{health}", healthString).replace("{hearts}", heartsString)
                 .replace("{max_health}", maxHealthString).replace("{max_hearts}", maxHeartsString)
-                .replace("{absorb_health}", absorptionHealthString).replace("{absorb_hearts}", absorptionHeartsString);
+                .replace("{absorb_health}", absorptionHealthString)
+                .replace("{absorb_hearts}", absorptionHeartsString);
     }
 }

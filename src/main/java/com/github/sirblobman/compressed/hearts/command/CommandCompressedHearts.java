@@ -35,7 +35,7 @@ public class CommandCompressedHearts extends Command {
             return getMatching(valueList, args[0]);
         }
 
-        if(args.length == 2 && args[0].toLowerCase().equals("display")) {
+        if(args.length == 2 && args[0].equalsIgnoreCase("display")) {
             List<String> valueList = Arrays.asList("bossbar", "actionbar");
             return getMatching(valueList, args[1]);
         }
@@ -63,7 +63,8 @@ public class CommandCompressedHearts extends Command {
     private boolean compressCommand(CommandSender sender) {
         if(!checkPermission(sender, "ch.command.compressed-hearts.compress", true)) return true;
         if(!(sender instanceof Player)) {
-            sendMessageOrDefault(sender, "error.player-only", "You are not a player.", null, true);
+            sendMessageOrDefault(sender, "error.player-only", "You are not a player.",
+                    null, true);
             return true;
         }
 
@@ -77,7 +78,8 @@ public class CommandCompressedHearts extends Command {
             playerDataManager.save(player);
             player.setHealthScaled(false);
 
-            sendMessageOrDefault(player, "command.compressed-hearts.compress.disabled", "", null, true);
+            sendMessageOrDefault(player, "command.compressed-hearts.compress.disabled", "",
+                    null, true);
             return true;
         }
 
@@ -86,7 +88,8 @@ public class CommandCompressedHearts extends Command {
         player.setHealthScaled(true);
         player.setHealthScale(20.0D);
 
-        sendMessageOrDefault(player, "command.compressed-hearts.compress.enabled", "", null, true);
+        sendMessageOrDefault(player, "command.compressed-hearts.compress.enabled", "",
+                null, true);
         return true;
     }
 
@@ -94,7 +97,8 @@ public class CommandCompressedHearts extends Command {
         if(args.length < 1) return false;
         if(!checkPermission(sender, "ch.command.compressed-hearts.display", true)) return true;
         if(!(sender instanceof Player)) {
-            sendMessageOrDefault(sender, "error.player-only", "You are not a player.", null, true);
+            sendMessageOrDefault(sender, "error.player-only", "You are not a player.",
+                    null, true);
             return true;
         }
 
@@ -113,13 +117,15 @@ public class CommandCompressedHearts extends Command {
         playerDataManager.save(player);
 
         Replacer replacer = message -> message.replace("{display-type}", displayType.name());
-        sendMessageOrDefault(player, "command.compressed-hearts.change-display", "", replacer, true);
+        sendMessageOrDefault(player, "command.compressed-hearts.change-display", "", replacer,
+                true);
         return true;
     }
 
     private boolean helpCommand(CommandSender sender) {
         if(!checkPermission(sender, "ch.command.compressed-hearts.help", true)) return true;
-        sendMessageOrDefault(sender, "command.compressed-hearts.help-message", "", null, true);
+        sendMessageOrDefault(sender, "command.compressed-hearts.help-message", "", null,
+                true);
         return true;
     }
 
@@ -131,7 +137,8 @@ public class CommandCompressedHearts extends Command {
         configurationManager.reload("language.yml");
         configurationManager.reload("language/en_us.lang.yml");
 
-        sendMessageOrDefault(sender, "command.compressed-hearts.reload-success", "", null, true);
+        sendMessageOrDefault(sender, "command.compressed-hearts.reload-success", "", null,
+                true);
         return true;
     }
 }
