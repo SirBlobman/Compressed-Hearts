@@ -21,7 +21,7 @@ command:
       - "&6/compressed-hearts compress&e: Compress or uncompress your hearts."
       - "&6/compressed-hearts display <boss/action/none>&e: Change the display type of your health."
       - "&6/compressed-hearts reload&e: Reload the config for this plugin."
-      - "&6/hp [player]&e: View your health or the health of another player.
+      - "&6/hp [player]&e: View your health or the health of another player."
 
     compress:
       enabled: "&7Health Compression: &aON"
