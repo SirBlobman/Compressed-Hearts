@@ -54,9 +54,12 @@ public final class DisplayTask extends BukkitRunnable {
         }
         
         switch(displayType) {
-            case BOSS_BAR: sendBossBar(player, message);
-            case ACTION_BAR: sendActionBar(player, message);
-            default: break;
+            case BOSS_BAR:
+                sendBossBar(player, message);
+            case ACTION_BAR:
+                sendActionBar(player, message);
+            default:
+                break;
         }
     }
     
@@ -271,7 +274,7 @@ public final class DisplayTask extends BukkitRunnable {
             String maxHealth = getMaxHealthString(player);
             Replacer replacer = message -> message.replace("{health}", health)
                     .replace("{max_health}", maxHealth);
-    
+            
             String messagePath = (witherEffect ? "display.wither-health-format" : "display.health-format");
             String message = languageManager.getMessage(player, messagePath, replacer, true);
             messageBuilder.append(message);
@@ -300,7 +303,7 @@ public final class DisplayTask extends BukkitRunnable {
             String maxHearts = getMaxHeartsString(player);
             Replacer replacer = message -> message.replace("{hearts}", hearts)
                     .replace("{max_hearts}", maxHearts);
-    
+            
             String messagePath = (witherEffect ? "display.wither-hearts-format" : "display.hearts-format");
             String message = languageManager.getMessage(player, messagePath, replacer, true);
             messageBuilder.append(message);
@@ -309,7 +312,7 @@ public final class DisplayTask extends BukkitRunnable {
         if(hasAbsorptionHealth(player)) {
             String absorptionHeartsString = getAbsorptionHeartsString(player);
             Replacer replacer = message -> message.replace("{absorb_hearts}", absorptionHeartsString);
-    
+            
             String messagePath = ("display.absorption-hearts-format");
             String message = languageManager.getMessage(player, messagePath, replacer, true);
             messageBuilder.append(message);
