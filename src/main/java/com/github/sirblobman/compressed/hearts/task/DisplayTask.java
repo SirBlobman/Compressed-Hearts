@@ -20,8 +20,7 @@ import com.github.sirblobman.bossbar.BossBarHandler;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 import com.github.sirblobman.compressed.hearts.object.DisplayType;
 
-public class DisplayTask extends BukkitRunnable {
-    
+public final class DisplayTask extends BukkitRunnable {
     private final HeartsPlugin plugin;
     
     public DisplayTask(HeartsPlugin plugin) {
@@ -31,7 +30,9 @@ public class DisplayTask extends BukkitRunnable {
     @Override
     public void run() {
         Collection<? extends Player> onlinePlayerCollection = Bukkit.getOnlinePlayers();
-        onlinePlayerCollection.forEach(this::checkDisplay);
+        for(Player player : onlinePlayerCollection) {
+            checkDisplay(player);
+        }
     }
     
     public void sendDisplay(Player player) {
@@ -43,37 +44,80 @@ public class DisplayTask extends BukkitRunnable {
         sendHealthDisplay(player);
     }
     
+    private HeartsPlugin getPlugin() {
+        return this.plugin;
+    }
+    
+    private ConfigurationManager getConfigurationManager() {
+        HeartsPlugin plugin = getPlugin();
+        return plugin.getConfigurationManager();
+    }
+    
+    private LanguageManager getLanguageManager() {
+        HeartsPlugin plugin = getPlugin();
+        return plugin.getLanguageManager();
+    }
+    
+    private PlayerDataManager getPlayerDataManager() {
+        HeartsPlugin plugin = getPlugin();
+        return plugin.getPlayerDataManager();
+    }
+    
+    private MultiVersionHandler getMultiVersionHandler() {
+        HeartsPlugin plugin = getPlugin();
+        return plugin.getMultiVersionHandler();
+    }
+    
+    private PlayerHandler getPlayerHandler() {
+        MultiVersionHandler multiVersionHandler = getMultiVersionHandler();
+        return multiVersionHandler.getPlayerHandler();
+    }
+    
+    private EntityHandler getEntityHandler() {
+        MultiVersionHandler multiVersionHandler = getMultiVersionHandler();
+        return multiVersionHandler.getEntityHandler();
+    }
+    
+    private BossBarHandler getBossBarHandler() {
+        MultiVersionHandler multiVersionHandler = getMultiVersionHandler();
+        return multiVersionHandler.getBossBarHandler();
+    }
+    
     private boolean shouldAlwaysShow(Player player) {
-        PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
-        YamlConfiguration configuration = playerDataManager.get(player);
-        if(configuration.isSet("always-show")) return configuration.getBoolean("always-show");
+        PlayerDataManager playerDataManager = getPlayerDataManager();
+        YamlConfiguration playerData = playerDataManager.get(player);
+        if(playerData.isSet("always-show")) {
+            return playerData.getBoolean("always-show");
+        }
         
-        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
-        YamlConfiguration pluginConfiguration = configurationManager.get("config.yml");
-        return pluginConfiguration.getBoolean("always-show");
+        ConfigurationManager configurationManager = getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        return configuration.getBoolean("always-show");
     }
     
     private boolean shouldUseHearts(Player player) {
-        PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
-        YamlConfiguration configuration = playerDataManager.get(player);
-        if(configuration.isSet("show-hearts")) return configuration.getBoolean("show-hearts");
+        PlayerDataManager playerDataManager = getPlayerDataManager();
+        YamlConfiguration playerData = playerDataManager.get(player);
+        if(playerData.isSet("show-hearts")) {
+            return playerData.getBoolean("show-hearts");
+        }
         
-        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
-        YamlConfiguration pluginConfiguration = configurationManager.get("config.yml");
-        return pluginConfiguration.getBoolean("show-hearts");
+        ConfigurationManager configurationManager = getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        return configuration.getBoolean("show-hearts");
     }
     
     private DisplayType getDisplayType(Player player) {
-        PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
-        YamlConfiguration configuration = playerDataManager.get(player);
-        if(configuration.isSet("display-type")) {
-            String displayTypeString = configuration.getString("display-type");
+        PlayerDataManager playerDataManager = getPlayerDataManager();
+        YamlConfiguration playerData = playerDataManager.get(player);
+        if(playerData.isSet("display-type")) {
+            String displayTypeString = playerData.getString("display-type");
             return DisplayType.parse(displayTypeString);
         }
         
-        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
-        YamlConfiguration pluginConfiguration = configurationManager.get("config.yml");
-        String displayTypeString = pluginConfiguration.getString("display-type");
+        ConfigurationManager configurationManager = getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        String displayTypeString = configuration.getString("display-type");
         return DisplayType.parse(displayTypeString);
     }
     
@@ -82,15 +126,20 @@ public class DisplayTask extends BukkitRunnable {
     }
     
     private void checkDisplay(Player player) {
-        if(!shouldAlwaysShow(player)) return;
-        sendDisplay(player);
+        if(shouldAlwaysShow(player)) {
+            sendDisplay(player);
+        }
     }
     
     private void sendHealthDisplay(Player player) {
-        LanguageManager languageManager = this.plugin.getLanguageManager();
-        MultiVersionHandler multiVersionHandler = this.plugin.getMultiVersionHandler();
-        PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
-        EntityHandler entityHandler = multiVersionHandler.getEntityHandler();
+        DisplayType displayType = getDisplayType(player);
+        if(displayType == null || displayType == DisplayType.NONE) {
+            return;
+        }
+        
+        LanguageManager languageManager = getLanguageManager();
+        PlayerHandler playerHandler = getPlayerHandler();
+        EntityHandler entityHandler = getEntityHandler();
         
         String decimalFormatString = languageManager.getMessage(player, "display.decimal-format",
                 null, false);
@@ -117,16 +166,13 @@ public class DisplayTask extends BukkitRunnable {
             message += absorptionHealthMessage;
         }
         
-        DisplayType displayType = getDisplayType(player);
-        if(displayType == null || displayType == DisplayType.NONE) return;
-        
         if(displayType == DisplayType.ACTION_BAR) {
             playerHandler.sendActionBar(player, message);
             return;
         }
         
         if(displayType == DisplayType.BOSS_BAR) {
-            BossBarHandler bossBarHandler = multiVersionHandler.getBossBarHandler();
+            BossBarHandler bossBarHandler = getBossBarHandler();
             bossBarHandler.updateBossBar(player, message, 1.0D, "BLUE", "SOLID");
         }
     }
@@ -136,6 +182,7 @@ public class DisplayTask extends BukkitRunnable {
         MultiVersionHandler multiVersionHandler = this.plugin.getMultiVersionHandler();
         PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
         EntityHandler entityHandler = multiVersionHandler.getEntityHandler();
+        BossBarHandler bossBarHandler = multiVersionHandler.getBossBarHandler();
         
         double normalHealth = player.getHealth();
         long normalHearts = Math.round(normalHealth / 2.0D);
@@ -166,11 +213,7 @@ public class DisplayTask extends BukkitRunnable {
         
         if(displayType == DisplayType.ACTION_BAR) {
             playerHandler.sendActionBar(player, message);
-            return;
-        }
-        
-        if(displayType == DisplayType.BOSS_BAR) {
-            BossBarHandler bossBarHandler = multiVersionHandler.getBossBarHandler();
+        } else if(displayType == DisplayType.BOSS_BAR) {
             bossBarHandler.updateBossBar(player, message, 1.0D, "BLUE", "SOLID");
         }
     }

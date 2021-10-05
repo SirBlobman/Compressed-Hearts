@@ -33,8 +33,8 @@ public class CommandHP extends PlayerCommand {
     @Override
     public List<String> onTabComplete(Player player, String[] args) {
         if(args.length == 1) {
-            Set<String> onlinePlayerNameSet = getOnlinePlayerNames();
-            return getMatching(onlinePlayerNameSet, args[0]);
+            Set<String> valueSet = getOnlinePlayerNames();
+            return getMatching(args[0], valueSet);
         }
         
         return Collections.emptyList();
@@ -48,7 +48,9 @@ public class CommandHP extends PlayerCommand {
         }
         
         Player target = findTarget(player, args[0]);
-        if(target == null) return true;
+        if(target == null) {
+            return true;
+        }
         
         showOther(player, target);
         return true;

@@ -1,27 +1,23 @@
 package com.github.sirblobman.compressed.hearts.listener;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.github.sirblobman.api.configuration.PlayerDataManager;
-import com.github.sirblobman.api.utility.Validate;
+import com.github.sirblobman.api.core.listener.PluginListener;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 import com.github.sirblobman.compressed.hearts.task.DisplayTask;
 
-public class ListenerHealth implements Listener {
-    private final HeartsPlugin plugin;
-    
+public final class ListenerHealth extends PluginListener<HeartsPlugin> {
     public ListenerHealth(HeartsPlugin plugin) {
-        this.plugin = Validate.notNull(plugin, "plugin must not be null!");
+        super(plugin);
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -55,11 +51,15 @@ public class ListenerHealth implements Listener {
     }
     
     private boolean shouldScaleHealth(Player player) {
-        PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
+        HeartsPlugin plugin = getPlugin();
+        PlayerDataManager playerDataManager = plugin.getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
-        if(playerData.isSet("scale-health")) return playerData.getBoolean("scale-health");
         
-        FileConfiguration configuration = this.plugin.getConfig();
+        if(playerData.isSet("scale-health")) {
+            return playerData.getBoolean("scale-health");
+        }
+        
+        YamlConfiguration configuration = plugin.getConfig();
         return configuration.getBoolean("scale-health");
     }
     
@@ -79,7 +79,8 @@ public class ListenerHealth implements Listener {
     }
     
     private void checkDisplay(Player player) {
-        DisplayTask displayTask = this.plugin.getDisplayTask();
+        HeartsPlugin plugin = getPlugin();
+        DisplayTask displayTask = plugin.getDisplayTask();
         displayTask.sendDisplay(player);
     }
 }

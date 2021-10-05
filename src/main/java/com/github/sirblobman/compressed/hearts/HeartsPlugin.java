@@ -1,7 +1,5 @@
 package com.github.sirblobman.compressed.hearts;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
@@ -9,7 +7,7 @@ import com.github.sirblobman.api.core.CorePlugin;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.update.UpdateManager;
-import com.github.sirblobman.compressed.hearts.command.CommandCompressedHearts;
+import com.github.sirblobman.compressed.hearts.command.compressedhearts.CommandCompressedHearts;
 import com.github.sirblobman.compressed.hearts.command.CommandHP;
 import com.github.sirblobman.compressed.hearts.listener.ListenerHealth;
 import com.github.sirblobman.compressed.hearts.task.DisplayTask;
@@ -28,15 +26,12 @@ public final class HeartsPlugin extends ConfigurablePlugin {
         
         LanguageManager languageManager = getLanguageManager();
         languageManager.saveDefaultLanguages();
+        languageManager.reloadLanguages();
     }
     
     @Override
     public void onEnable() {
-        LanguageManager languageManager = getLanguageManager();
-        languageManager.reloadLanguages();
-        
-        PluginManager manager = Bukkit.getPluginManager();
-        manager.registerEvents(new ListenerHealth(this), this);
+        new ListenerHealth(this).register();
         
         new CommandCompressedHearts(this).register();
         new CommandHP(this).register();
