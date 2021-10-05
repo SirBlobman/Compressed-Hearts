@@ -28,6 +28,7 @@ command:
       enabled: "&7Health Compression: &aON"
       disabled: "&7Health Compression: &cOFF"
 
+    display-already-matches: "&aYour current display type is already &7{value}&c."
     change-display: "&aSuccessfully changed your display type to &7{display-type}&a."
     reload-success: "&aSuccessfully reloaded the configuration files for compressed hearts."
 

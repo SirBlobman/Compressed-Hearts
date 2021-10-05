@@ -9,6 +9,7 @@ import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.update.UpdateManager;
 import com.github.sirblobman.compressed.hearts.command.CommandHP;
 import com.github.sirblobman.compressed.hearts.command.compressedhearts.CommandCompressedHearts;
+import com.github.sirblobman.compressed.hearts.listener.ListenerDisplayType;
 import com.github.sirblobman.compressed.hearts.listener.ListenerHealth;
 import com.github.sirblobman.compressed.hearts.task.DisplayTask;
 
@@ -35,6 +36,7 @@ public final class HeartsPlugin extends ConfigurablePlugin {
         new CommandHP(this).register();
         
         new ListenerHealth(this).register();
+        new ListenerDisplayType(this).register();
         
         DisplayTask displayTask = getDisplayTask();
         displayTask.runTaskTimer(this, 5L, 5L);

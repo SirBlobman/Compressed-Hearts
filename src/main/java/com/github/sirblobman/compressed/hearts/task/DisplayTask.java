@@ -335,4 +335,9 @@ public final class DisplayTask extends BukkitRunnable {
         BossBarHandler bossBarHandler = getBossBarHandler();
         bossBarHandler.updateBossBar(player, message, 1.0D, "BLUE", "SOLID");
     }
+    
+    public void removeBossBar(Player player) {
+        BossBarHandler bossBarHandler = getBossBarHandler();
+        bossBarHandler.removeBossBar(player);
+    }
 }

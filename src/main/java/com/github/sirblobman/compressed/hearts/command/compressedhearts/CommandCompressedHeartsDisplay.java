@@ -3,14 +3,19 @@ package com.github.sirblobman.compressed.hearts.command.compressedhearts;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.plugin.PluginManager;
 
 import com.github.sirblobman.api.command.PlayerCommand;
+import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.language.Replacer;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
+import com.github.sirblobman.compressed.hearts.event.PlayerChangeHeartsDisplayTypeEvent;
 import com.github.sirblobman.compressed.hearts.object.DisplayType;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,21 +55,46 @@ public final class CommandCompressedHeartsDisplay extends PlayerCommand {
         }
         
         String sub = args[0];
-        DisplayType displayType = parseDisplayType(sub);
-        if(displayType == null) {
+        DisplayType newDisplayType = parseDisplayType(sub);
+        if(newDisplayType == null) {
             Replacer replacer = message -> message.replace("{value}", sub);
             sendMessage(player, "error.invalid-display-type", replacer, true);
             return true;
         }
         
+        DisplayType oldDisplayType = getDisplayType(player);
+        if(oldDisplayType == newDisplayType) {
+            Replacer replacer = message -> message.replace("{value}", newDisplayType.name());
+            sendMessage(player, "command.compressed-hearts.display-already-matches", replacer, true);
+            return true;
+        }
+        
         PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
-        playerData.set("display-type", displayType.name());
+        playerData.set("display-type", newDisplayType.name());
         playerDataManager.save(player);
-        
-        Replacer replacer = message -> message.replace("{display-type}", displayType.name());
+    
+        Replacer replacer = message -> message.replace("{display-type}", newDisplayType.name());
         sendMessage(player, "command.compressed-hearts.change-display", replacer, true);
+    
+        Event event = new PlayerChangeHeartsDisplayTypeEvent(player, oldDisplayType, newDisplayType);
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        pluginManager.callEvent(event);
         return true;
+    }
+    
+    private HeartsPlugin getHeartsPlugin() {
+        return this.plugin;
+    }
+    
+    private ConfigurationManager getConfigurationManager() {
+        HeartsPlugin plugin = getHeartsPlugin();
+        return plugin.getConfigurationManager();
+    }
+    
+    private PlayerDataManager getPlayerDataManager() {
+        HeartsPlugin plugin = getHeartsPlugin();
+        return plugin.getPlayerDataManager();
     }
     
     @Nullable
@@ -78,5 +108,22 @@ public final class CommandCompressedHeartsDisplay extends PlayerCommand {
         }
         
         return DisplayType.parse(value);
+    }
+    
+    @NotNull
+    private DisplayType getDisplayType(Player player) {
+        PlayerDataManager playerDataManager = getPlayerDataManager();
+        YamlConfiguration playerData = playerDataManager.get(player);
+        if(playerData.isSet("display-type")) {
+            String displayTypeString = playerData.getString("display-type");
+            DisplayType displayType = DisplayType.parse(displayTypeString);
+            return (displayType == null ? DisplayType.NONE : displayType);
+        }
+        
+        ConfigurationManager configurationManager = getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        String displayTypeString = configuration.getString("display-type");
+        DisplayType displayType = DisplayType.parse(displayTypeString);
+        return (displayType == null ? DisplayType.NONE : displayType);
     }
 }
