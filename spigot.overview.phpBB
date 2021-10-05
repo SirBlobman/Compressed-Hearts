@@ -11,11 +11,18 @@ A plugin that allows you to change the heart scale of your players
 
 [SIZE=5][COLOR=#FF0000][B]Features:[/B][/COLOR][/SIZE]
 [LIST]
-[*]Changes the scale of hearts to always show as 10 hearts (Scale 20.0)
-[*]Configurable display type for the exact health value (boss bar / action bar)
-[*]Configurable messages and per-player locale (if configured)
-[*]Show the value as hearts or as the full health decimal
-[*]Optional obfuscation (magic text format) of actual health when under the wither effect
+[*]Scaled player health to prevent screen overflow.
+[*]Configurable display type for actual health information.
+[LIST]
+[*][B]Boss Bar:[/B] Show the health as a bar on top of the screen
+[*][B]Action Bar:[/B] Show the health as a text line above the hotbar.
+[*][B]No Display:[/B] Don't show the health anywhere.
+[*]Boss Bar and Action Bar options support PlaceholderAPI.
+[/LIST]
+[*]Configurable messages and optional per-player locale (requires manual translation).
+[*]Option to show values as health (decimal) or hearts (integer) with custom formats.
+[*]Option to hide health with magic formatting when player has wither effect applied.
+[*]Command for players to choose whether they want their health to scale and their display type.
 [/LIST]
 
 [SIZE=5][B][COLOR=#FF0000]Help and Support:[/COLOR][/B][/SIZE]
