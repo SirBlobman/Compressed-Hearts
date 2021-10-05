@@ -56,8 +56,12 @@ public final class DisplayTask extends BukkitRunnable {
         switch(displayType) {
             case BOSS_BAR:
                 sendBossBar(player, message);
+                break;
+            
             case ACTION_BAR:
                 sendActionBar(player, message);
+                break;
+            
             default:
                 break;
         }

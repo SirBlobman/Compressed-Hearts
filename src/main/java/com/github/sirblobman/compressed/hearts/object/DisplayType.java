@@ -10,7 +10,7 @@ public enum DisplayType {
     @Nullable
     public static DisplayType parse(String string) {
         try {
-            String uppercase = string.toLowerCase(Locale.US);
+            String uppercase = string.toUpperCase(Locale.US);
             String replace = uppercase.replace('-', '_').replace(' ', '_');
             return valueOf(replace);
         } catch(IllegalArgumentException ex) {
