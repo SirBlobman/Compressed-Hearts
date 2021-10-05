@@ -32,7 +32,7 @@ public final class CommandCompressedHeartsDisplay extends PlayerCommand {
     
     @Override
     protected List<String> onTabComplete(Player player, String[] args) {
-        if(args.length == 0) {
+        if(args.length == 1) {
             return getMatching(args[0], "bossbar", "actionbar", "none");
         }
         
@@ -52,7 +52,9 @@ public final class CommandCompressedHeartsDisplay extends PlayerCommand {
         String sub = args[0];
         DisplayType displayType = parseDisplayType(sub);
         if(displayType == null) {
-            return false;
+            Replacer replacer = message -> message.replace("{value}", sub);
+            sendMessage(player, "error.invalid-display-type", replacer, true);
+            return true;
         }
         
         PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
@@ -71,7 +73,7 @@ public final class CommandCompressedHeartsDisplay extends PlayerCommand {
             value = "boss_bar";
         }
         
-        if(value.equalsIgnoreCase("actiobar")) {
+        if(value.equalsIgnoreCase("actionbar")) {
             value = "action_bar";
         }
         

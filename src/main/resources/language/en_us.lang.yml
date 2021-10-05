@@ -2,6 +2,7 @@ error:
   no-permission: "&cMissing Permission: &7{permission}"
   player-only: "&cOnly players can execute this command."
   invalid-target: "&7{target}&c is not online or does not exist."
+  invalid-display-type: "&7{value}&c is not a valid display type."
 
 display:
   integer-format: "#,##0"
