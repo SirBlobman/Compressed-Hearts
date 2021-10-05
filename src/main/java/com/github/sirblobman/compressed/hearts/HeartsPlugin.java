@@ -16,44 +16,44 @@ import com.github.sirblobman.compressed.hearts.task.DisplayTask;
 
 public final class HeartsPlugin extends ConfigurablePlugin {
     private final DisplayTask displayTask;
-
+    
     public HeartsPlugin() {
         this.displayTask = new DisplayTask(this);
     }
-
+    
     @Override
     public void onLoad() {
         ConfigurationManager configurationManager = getConfigurationManager();
         configurationManager.saveDefault("config.yml");
-
+        
         LanguageManager languageManager = getLanguageManager();
         languageManager.saveDefaultLanguages();
     }
-
+    
     @Override
     public void onEnable() {
         LanguageManager languageManager = getLanguageManager();
         languageManager.reloadLanguages();
-
+        
         PluginManager manager = Bukkit.getPluginManager();
         manager.registerEvents(new ListenerHealth(this), this);
-
+        
         new CommandCompressedHearts(this).register();
         new CommandHP(this).register();
-
+        
         DisplayTask displayTask = getDisplayTask();
         displayTask.runTaskTimer(this, 5L, 5L);
-
+        
         CorePlugin corePlugin = JavaPlugin.getPlugin(CorePlugin.class);
         UpdateManager updateManager = corePlugin.getUpdateManager();
         updateManager.addResource(this, 44024L);
     }
-
+    
     @Override
     public void onDisable() {
         // Do Nothing
     }
-
+    
     public DisplayTask getDisplayTask() {
         return this.displayTask;
     }
