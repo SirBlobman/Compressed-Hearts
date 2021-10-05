@@ -7,8 +7,8 @@ import com.github.sirblobman.api.core.CorePlugin;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.update.UpdateManager;
-import com.github.sirblobman.compressed.hearts.command.compressedhearts.CommandCompressedHearts;
 import com.github.sirblobman.compressed.hearts.command.CommandHP;
+import com.github.sirblobman.compressed.hearts.command.compressedhearts.CommandCompressedHearts;
 import com.github.sirblobman.compressed.hearts.listener.ListenerHealth;
 import com.github.sirblobman.compressed.hearts.task.DisplayTask;
 

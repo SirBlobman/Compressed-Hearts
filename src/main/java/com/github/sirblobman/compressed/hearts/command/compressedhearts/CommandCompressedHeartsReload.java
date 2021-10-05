@@ -43,7 +43,7 @@ public final class CommandCompressedHeartsReload extends Command {
         
         LanguageManager languageManager = getLanguageManager();
         languageManager.reloadLanguages();
-    
+        
         sendMessage(sender, "command.compressed-hearts.reload-success", null, true);
         return true;
     }

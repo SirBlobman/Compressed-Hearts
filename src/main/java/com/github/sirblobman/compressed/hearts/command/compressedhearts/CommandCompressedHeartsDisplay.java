@@ -54,14 +54,14 @@ public final class CommandCompressedHeartsDisplay extends PlayerCommand {
         if(displayType == null) {
             return false;
         }
-    
+        
         PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         playerData.set("display-type", displayType.name());
         playerDataManager.save(player);
-    
+        
         Replacer replacer = message -> message.replace("{display-type}", displayType.name());
-        sendMessage(player, "command.compressed-hearts.change-display", replacer,true);
+        sendMessage(player, "command.compressed-hearts.change-display", replacer, true);
         return true;
     }
     

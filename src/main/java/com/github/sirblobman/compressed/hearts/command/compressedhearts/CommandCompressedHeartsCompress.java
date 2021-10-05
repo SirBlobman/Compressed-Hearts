@@ -41,21 +41,21 @@ public final class CommandCompressedHeartsCompress extends PlayerCommand {
         PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         boolean scaleHealth = playerData.getBoolean("scale-health");
-    
+        
         if(scaleHealth) {
             playerData.set("scale-health", false);
             playerDataManager.save(player);
             player.setHealthScaled(false);
-        
-            sendMessage(player, "command.compressed-hearts.compress.disabled",null, true);
+            
+            sendMessage(player, "command.compressed-hearts.compress.disabled", null, true);
             return true;
         }
-    
+        
         playerData.set("scale-health", true);
         playerDataManager.save(player);
         player.setHealthScaled(true);
         player.setHealthScale(20.0D);
-    
+        
         sendMessage(player, "command.compressed-hearts.compress.enabled", null, true);
         return true;
     }
