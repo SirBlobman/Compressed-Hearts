@@ -13,6 +13,9 @@ authors:
 depend:
   - "SirBlobmanCore"
 
+softdepend:
+  - "PlaceholderAPI"
+
 commands:
   compressed-hearts:
     description: "Main command for the CompressedHearts plugin."

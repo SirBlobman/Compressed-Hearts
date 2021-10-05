@@ -31,10 +31,10 @@ public final class HeartsPlugin extends ConfigurablePlugin {
     
     @Override
     public void onEnable() {
-        new ListenerHealth(this).register();
-        
         new CommandCompressedHearts(this).register();
         new CommandHP(this).register();
+        
+        new ListenerHealth(this).register();
         
         DisplayTask displayTask = getDisplayTask();
         displayTask.runTaskTimer(this, 5L, 5L);

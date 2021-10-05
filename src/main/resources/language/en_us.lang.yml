@@ -4,13 +4,14 @@ error:
   invalid-target: "&7{target}&c is not online or does not exist."
 
 display:
-  decimal-format: "0.00"
+  integer-format: "#,##0"
+  decimal-format: "#,##0.00"
   health-format: "&c{health}/{max_health} HP"
   hearts-format: "&c{hearts}/{max_hearts} &4&l\u2764"
   wither-health-format: "&2HP: &0&k{health}&c/&0&k{max_health}"
   wither-hearts-format: "&0&k{hearts}&c/&0&k{max_hearts} &0&l\u2764"
   absorption-health-format: " &e+ {absorb_health}"
-  absorption-hearts-format: "&e+ {absorb_hearts} &6&l\u2764"
+  absorption-hearts-format: " &e+ {absorb_hearts} &6&l\u2764"
 
 command:
   compressed-hearts:

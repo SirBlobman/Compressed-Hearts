@@ -1,7 +1,10 @@
 package com.github.sirblobman.compressed.hearts.task;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Collection;
+import java.util.Locale;
+import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,13 +14,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
+import com.github.sirblobman.api.language.Language;
 import com.github.sirblobman.api.language.LanguageManager;
+import com.github.sirblobman.api.language.Replacer;
 import com.github.sirblobman.api.nms.EntityHandler;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.bossbar.BossBarHandler;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
+import com.github.sirblobman.compressed.hearts.hook.HookPlaceholderAPI;
 import com.github.sirblobman.compressed.hearts.object.DisplayType;
 
 public final class DisplayTask extends BukkitRunnable {
@@ -36,12 +42,22 @@ public final class DisplayTask extends BukkitRunnable {
     }
     
     public void sendDisplay(Player player) {
-        if(shouldUseHearts(player)) {
-            sendHeartsDisplay(player);
+        boolean hearts = shouldUseHearts(player);
+        String message = (hearts ? getHeartsDisplayMessage(player) : getHealthDisplayMessage(player));
+        if(message == null || message.isEmpty()) {
             return;
         }
         
-        sendHealthDisplay(player);
+        DisplayType displayType = getDisplayType(player);
+        if(displayType == null || displayType == DisplayType.NONE) {
+            return;
+        }
+        
+        switch(displayType) {
+            case BOSS_BAR: sendBossBar(player, message);
+            case ACTION_BAR: sendActionBar(player, message);
+            default: break;
+        }
     }
     
     private HeartsPlugin getPlugin() {
@@ -121,8 +137,122 @@ public final class DisplayTask extends BukkitRunnable {
         return DisplayType.parse(displayTypeString);
     }
     
+    private DecimalFormat getDecimalFormat(Player player) {
+        LanguageManager languageManager = getLanguageManager();
+        Language language = languageManager.getLanguage(player);
+        Optional<Locale> optionalLocale = language.getJavaLocale();
+        
+        Locale locale = optionalLocale.orElse(Locale.US);
+        DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
+        
+        String path = ("display.decimal-format");
+        String decimalFormatString = languageManager.getMessage(player, path, null, false);
+        return new DecimalFormat(decimalFormatString, decimalFormatSymbols);
+    }
+    
+    private DecimalFormat getIntegerFormat(Player player) {
+        LanguageManager languageManager = getLanguageManager();
+        Language language = languageManager.getLanguage(player);
+        Optional<Locale> optionalLocale = language.getJavaLocale();
+        
+        Locale locale = optionalLocale.orElse(Locale.US);
+        DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
+        
+        String path = ("display.integer-format");
+        String decimalFormatString = languageManager.getMessage(player, path, null, false);
+        return new DecimalFormat(decimalFormatString, decimalFormatSymbols);
+    }
+    
     private boolean hasWitherEffect(Player player) {
+        if(player == null) {
+            return false;
+        }
+        
         return player.hasPotionEffect(PotionEffectType.WITHER);
+    }
+    
+    private double getHealth(Player player) {
+        if(player == null) {
+            return 0.0D;
+        }
+        
+        return player.getHealth();
+    }
+    
+    private boolean hasHealth(Player player) {
+        double health = getHealth(player);
+        return (health > 0.0D);
+    }
+    
+    private String getHealthString(Player player) {
+        double health = getHealth(player);
+        DecimalFormat decimalFormat = getDecimalFormat(player);
+        return decimalFormat.format(health);
+    }
+    
+    private double getMaxHealth(Player player) {
+        EntityHandler entityHandler = getEntityHandler();
+        return entityHandler.getMaxHealth(player);
+    }
+    
+    private String getMaxHealthString(Player player) {
+        double maxHealth = getMaxHealth(player);
+        DecimalFormat decimalFormat = getDecimalFormat(player);
+        return decimalFormat.format(maxHealth);
+    }
+    
+    private double getAbsorptionHealth(Player player) {
+        PlayerHandler playerHandler = getPlayerHandler();
+        return playerHandler.getAbsorptionHearts(player);
+    }
+    
+    private boolean hasAbsorptionHealth(Player player) {
+        double absorptionHealth = getAbsorptionHealth(player);
+        return (absorptionHealth > 0.0D);
+    }
+    
+    private String getAbsorptionHealthString(Player player) {
+        double absorptionHealth = getAbsorptionHealth(player);
+        DecimalFormat decimalFormat = getDecimalFormat(player);
+        return decimalFormat.format(absorptionHealth);
+    }
+    
+    private long ceil(double value) {
+        double ceil = Math.ceil(value);
+        return Math.round(ceil);
+    }
+    
+    private long getHearts(Player player) {
+        double health = getHealth(player);
+        return ceil(health / 2.0D);
+    }
+    
+    private long getMaxHearts(Player player) {
+        double maxHealth = getMaxHealth(player);
+        return ceil(maxHealth / 2.0D);
+    }
+    
+    private long getAbsorptionHearts(Player player) {
+        double absorptionHealth = getAbsorptionHealth(player);
+        return ceil(absorptionHealth / 2.0D);
+    }
+    
+    private String getHeartsString(Player player) {
+        long hearts = getHearts(player);
+        DecimalFormat integerFormat = getIntegerFormat(player);
+        return integerFormat.format(hearts);
+    }
+    
+    private String getMaxHeartsString(Player player) {
+        long maxHearts = getMaxHearts(player);
+        DecimalFormat integerFormat = getIntegerFormat(player);
+        return integerFormat.format(maxHearts);
+    }
+    
+    private String getAbsorptionHeartsString(Player player) {
+        long absorptionHearts = getAbsorptionHearts(player);
+        DecimalFormat integerFormat = getIntegerFormat(player);
+        return integerFormat.format(absorptionHearts);
     }
     
     private void checkDisplay(Player player) {
@@ -131,90 +261,71 @@ public final class DisplayTask extends BukkitRunnable {
         }
     }
     
-    private void sendHealthDisplay(Player player) {
-        DisplayType displayType = getDisplayType(player);
-        if(displayType == null || displayType == DisplayType.NONE) {
-            return;
-        }
-        
+    private String getHealthDisplayMessage(Player player) {
         LanguageManager languageManager = getLanguageManager();
-        PlayerHandler playerHandler = getPlayerHandler();
-        EntityHandler entityHandler = getEntityHandler();
+        boolean witherEffect = hasWitherEffect(player);
         
-        String decimalFormatString = languageManager.getMessage(player, "display.decimal-format",
-                null, false);
-        DecimalFormat decimalFormat = new DecimalFormat(decimalFormatString);
-        
-        double normalHealth = player.getHealth();
-        String normalHealthString = decimalFormat.format(normalHealth);
-        
-        double maxHealth = entityHandler.getMaxHealth(player);
-        String maxHealthString = decimalFormat.format(maxHealth);
-        
-        String messagePath = (hasWitherEffect(player) ? "display.wither-health-format" : "display.health-format");
-        String messageFormat = languageManager.getMessage(player, messagePath, null, true);
-        String message = messageFormat.replace("{health}", normalHealthString)
-                .replace("{max_health}", maxHealthString);
-        
-        double absorptionHealth = playerHandler.getAbsorptionHearts(player);
-        if(absorptionHealth > 0.0D) {
-            String absorptionHealthString = decimalFormat.format(absorptionHealth);
-            String absorptionHealthFormat = languageManager.getMessage(player, "display.absorption-health-format",
-                    null, true);
-            String absorptionHealthMessage = absorptionHealthFormat.replace("{absorb_health}",
-                    absorptionHealthString);
-            message += absorptionHealthMessage;
+        StringBuilder messageBuilder = new StringBuilder();
+        if(hasHealth(player)) {
+            String health = getHealthString(player);
+            String maxHealth = getMaxHealthString(player);
+            Replacer replacer = message -> message.replace("{health}", health)
+                    .replace("{max_health}", maxHealth);
+    
+            String messagePath = (witherEffect ? "display.wither-health-format" : "display.health-format");
+            String message = languageManager.getMessage(player, messagePath, replacer, true);
+            messageBuilder.append(message);
         }
         
-        if(displayType == DisplayType.ACTION_BAR) {
-            playerHandler.sendActionBar(player, message);
-            return;
+        if(hasAbsorptionHealth(player)) {
+            String absorptionHealthString = getAbsorptionHealthString(player);
+            Replacer replacer = message -> message.replace("{absorb_health}", absorptionHealthString);
+            
+            String messagePath = ("display.absorption-health-format");
+            String message = languageManager.getMessage(player, messagePath, replacer, true);
+            messageBuilder.append(message);
         }
         
-        if(displayType == DisplayType.BOSS_BAR) {
-            BossBarHandler bossBarHandler = getBossBarHandler();
-            bossBarHandler.updateBossBar(player, message, 1.0D, "BLUE", "SOLID");
-        }
+        String message = messageBuilder.toString();
+        return HookPlaceholderAPI.replace(player, message);
     }
     
-    private void sendHeartsDisplay(Player player) {
-        LanguageManager languageManager = this.plugin.getLanguageManager();
-        MultiVersionHandler multiVersionHandler = this.plugin.getMultiVersionHandler();
-        PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
-        EntityHandler entityHandler = multiVersionHandler.getEntityHandler();
-        BossBarHandler bossBarHandler = multiVersionHandler.getBossBarHandler();
+    private String getHeartsDisplayMessage(Player player) {
+        LanguageManager languageManager = getLanguageManager();
+        boolean witherEffect = hasWitherEffect(player);
         
-        double normalHealth = player.getHealth();
-        long normalHearts = Math.round(normalHealth / 2.0D);
-        String normalHeartsString = Long.toString(normalHearts);
-        
-        double maxHealth = entityHandler.getMaxHealth(player);
-        long maxHearts = Math.round(maxHealth / 2.0D);
-        String maxHeartsString = Long.toString(maxHearts);
-        
-        String messagePath = (hasWitherEffect(player) ? "display.wither-hearts-format" : "display.hearts-format");
-        String messageFormat = languageManager.getMessage(player, messagePath, null, true);
-        String message = messageFormat.replace("{hearts}", normalHeartsString)
-                .replace("{max_hearts}", maxHeartsString);
-        
-        double absorptionHealth = playerHandler.getAbsorptionHearts(player);
-        long absorptionHearts = Math.round(absorptionHealth / 2.0D);
-        if(absorptionHearts > 0) {
-            String absorptionHeartsString = Long.toString(absorptionHearts);
-            String absorptionHeartsFormat = languageManager.getMessage(player, "display.absorption-hearts-format",
-                    null, true);
-            String absorptionHeartsMessage = absorptionHeartsFormat
-                    .replace("{absorb_hearts}", absorptionHeartsString);
-            message += absorptionHeartsMessage;
+        StringBuilder messageBuilder = new StringBuilder();
+        if(hasHealth(player)) {
+            String hearts = getHeartsString(player);
+            String maxHearts = getMaxHeartsString(player);
+            Replacer replacer = message -> message.replace("{hearts}", hearts)
+                    .replace("{max_hearts}", maxHearts);
+    
+            String messagePath = (witherEffect ? "display.wither-hearts-format" : "display.hearts-format");
+            String message = languageManager.getMessage(player, messagePath, replacer, true);
+            messageBuilder.append(message);
         }
         
-        DisplayType displayType = getDisplayType(player);
-        if(displayType == null || displayType == DisplayType.NONE) return;
-        
-        if(displayType == DisplayType.ACTION_BAR) {
-            playerHandler.sendActionBar(player, message);
-        } else if(displayType == DisplayType.BOSS_BAR) {
-            bossBarHandler.updateBossBar(player, message, 1.0D, "BLUE", "SOLID");
+        if(hasAbsorptionHealth(player)) {
+            String absorptionHeartsString = getAbsorptionHeartsString(player);
+            Replacer replacer = message -> message.replace("{absorb_hearts}", absorptionHeartsString);
+    
+            String messagePath = ("display.absorption-hearts-format");
+            String message = languageManager.getMessage(player, messagePath, replacer, true);
+            messageBuilder.append(message);
         }
+        
+        String message = messageBuilder.toString();
+        return HookPlaceholderAPI.replace(player, message);
+    }
+    
+    private void sendActionBar(Player player, String message) {
+        PlayerHandler playerHandler = getPlayerHandler();
+        playerHandler.sendActionBar(player, message);
+    }
+    
+    private void sendBossBar(Player player, String message) {
+        BossBarHandler bossBarHandler = getBossBarHandler();
+        bossBarHandler.updateBossBar(player, message, 1.0D, "BLUE", "SOLID");
     }
 }
