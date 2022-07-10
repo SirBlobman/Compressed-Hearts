@@ -8,13 +8,14 @@ import org.bukkit.command.CommandSender;
 import com.github.sirblobman.api.command.Command;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 
-public class CommandCompressedHearts extends Command {
+public final class CommandCompressedHearts extends Command {
     public CommandCompressedHearts(HeartsPlugin plugin) {
         super(plugin, "compressed-hearts");
-        addSubCommand(new CommandCompressedHeartsCompress(plugin));
-        addSubCommand(new CommandCompressedHeartsDisplay(plugin));
-        addSubCommand(new CommandCompressedHeartsHelp(plugin));
-        addSubCommand(new CommandCompressedHeartsReload(plugin));
+
+        addSubCommand(new SubCommandCompress(plugin));
+        addSubCommand(new SubCommandDisplay(plugin));
+        addSubCommand(new SubCommandHelp(plugin));
+        addSubCommand(new SubCommandReload(plugin));
     }
     
     @Override

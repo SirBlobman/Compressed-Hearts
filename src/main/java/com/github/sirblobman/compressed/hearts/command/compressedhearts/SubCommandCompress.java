@@ -13,12 +13,14 @@ import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class CommandCompressedHeartsCompress extends PlayerCommand {
+public final class SubCommandCompress extends PlayerCommand {
     private final HeartsPlugin plugin;
     
-    public CommandCompressedHeartsCompress(HeartsPlugin plugin) {
+    public SubCommandCompress(HeartsPlugin plugin) {
         super(plugin, "compress");
         this.plugin = plugin;
+
+        setPermissionName("ch.command.compressed-hearts.compress");
     }
     
     @NotNull
@@ -34,10 +36,6 @@ public final class CommandCompressedHeartsCompress extends PlayerCommand {
     
     @Override
     protected boolean execute(Player player, String[] args) {
-        if(!checkPermission(player, "ch.command.compressed-hearts.compress", true)) {
-            return true;
-        }
-        
         PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         boolean scaleHealth = playerData.getBoolean("scale-health");

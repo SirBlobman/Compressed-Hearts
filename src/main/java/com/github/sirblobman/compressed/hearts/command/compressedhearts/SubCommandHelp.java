@@ -11,12 +11,14 @@ import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class CommandCompressedHeartsHelp extends Command {
+public final class SubCommandHelp extends Command {
     private final HeartsPlugin plugin;
     
-    public CommandCompressedHeartsHelp(HeartsPlugin plugin) {
+    public SubCommandHelp(HeartsPlugin plugin) {
         super(plugin, "help");
         this.plugin = plugin;
+
+        setPermissionName("ch.command.compressed-hearts.help");
     }
     
     @NotNull
@@ -32,10 +34,6 @@ public final class CommandCompressedHeartsHelp extends Command {
     
     @Override
     protected boolean execute(CommandSender sender, String[] args) {
-        if(!checkPermission(sender, "ch.command.compressed-hearts.help", true)) {
-            return true;
-        }
-        
         sendMessage(sender, "command.compressed-hearts.help-message", null, true);
         return true;
     }

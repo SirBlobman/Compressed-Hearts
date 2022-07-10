@@ -6,18 +6,19 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 
 import com.github.sirblobman.api.command.Command;
-import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class CommandCompressedHeartsReload extends Command {
+public final class SubCommandReload extends Command {
     private final HeartsPlugin plugin;
     
-    public CommandCompressedHeartsReload(HeartsPlugin plugin) {
+    public SubCommandReload(HeartsPlugin plugin) {
         super(plugin, "reload");
         this.plugin = plugin;
+
+        setPermissionName("ch.command.compressed-hearts.reload");
     }
     
     @NotNull
@@ -33,17 +34,7 @@ public final class CommandCompressedHeartsReload extends Command {
     
     @Override
     protected boolean execute(CommandSender sender, String[] args) {
-        if(!checkPermission(sender, "ch.command.compressed-hearts.reload", true)) {
-            return true;
-        }
-        
-        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
-        configurationManager.reload("config.yml");
-        configurationManager.reload("language.yml");
-        
-        LanguageManager languageManager = getLanguageManager();
-        languageManager.reloadLanguages();
-        
+        this.plugin.reloadConfig();
         sendMessage(sender, "command.compressed-hearts.reload-success", null, true);
         return true;
     }

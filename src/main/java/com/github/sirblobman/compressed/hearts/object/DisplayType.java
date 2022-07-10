@@ -5,7 +5,10 @@ import java.util.Locale;
 import org.jetbrains.annotations.Nullable;
 
 public enum DisplayType {
-    BOSS_BAR, ACTION_BAR, NONE;
+    BOSS_BAR,
+    ACTION_BAR,
+    NONE
+    ;
     
     @Nullable
     public static DisplayType parse(String string) {

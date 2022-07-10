@@ -21,12 +21,14 @@ import com.github.sirblobman.compressed.hearts.object.DisplayType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class CommandCompressedHeartsDisplay extends PlayerCommand {
+public final class SubCommandDisplay extends PlayerCommand {
     private final HeartsPlugin plugin;
     
-    public CommandCompressedHeartsDisplay(HeartsPlugin plugin) {
+    public SubCommandDisplay(HeartsPlugin plugin) {
         super(plugin, "display");
         this.plugin = plugin;
+
+        setPermissionName("ch.command.compressed-hearts.display");
     }
     
     @NotNull
@@ -46,10 +48,6 @@ public final class CommandCompressedHeartsDisplay extends PlayerCommand {
     
     @Override
     protected boolean execute(Player player, String[] args) {
-        if(!checkPermission(player, "ch.command.compressed-hearts.display", true)) {
-            return true;
-        }
-        
         if(args.length < 1) {
             return false;
         }

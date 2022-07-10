@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.github.sirblobman.api.configuration.PlayerDataManager;
-import com.github.sirblobman.api.core.listener.PluginListener;
+import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 import com.github.sirblobman.compressed.hearts.task.DisplayTask;
 

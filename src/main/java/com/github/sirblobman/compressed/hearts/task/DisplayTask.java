@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Collection;
 import java.util.Locale;
-import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -147,9 +146,12 @@ public final class DisplayTask extends BukkitRunnable {
     private DecimalFormat getDecimalFormat(Player player) {
         LanguageManager languageManager = getLanguageManager();
         Language language = languageManager.getLanguage(player);
-        Optional<Locale> optionalLocale = language.getJavaLocale();
-        
-        Locale locale = optionalLocale.orElse(Locale.US);
+        if(language == null) {
+            DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.US);
+            return new DecimalFormat("0.00", decimalFormatSymbols);
+        }
+
+        Locale locale = language.getJavaLocale().orElse(Locale.US);
         DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
         
         String path = ("display.decimal-format");
@@ -160,11 +162,14 @@ public final class DisplayTask extends BukkitRunnable {
     private DecimalFormat getIntegerFormat(Player player) {
         LanguageManager languageManager = getLanguageManager();
         Language language = languageManager.getLanguage(player);
-        Optional<Locale> optionalLocale = language.getJavaLocale();
-        
-        Locale locale = optionalLocale.orElse(Locale.US);
+        if(language == null) {
+            DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.US);
+            return new DecimalFormat("0", decimalFormatSymbols);
+        }
+
+        Locale locale = language.getJavaLocale().orElse(Locale.US);
         DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
-        
+
         String path = ("display.integer-format");
         String decimalFormatString = languageManager.getMessage(player, path, null, false);
         return new DecimalFormat(decimalFormatString, decimalFormatSymbols);

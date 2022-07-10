@@ -26,12 +26,13 @@ public final class HeartsPlugin extends ConfigurablePlugin {
         configurationManager.saveDefault("config.yml");
         
         LanguageManager languageManager = getLanguageManager();
-        languageManager.saveDefaultLanguages();
-        languageManager.reloadLanguages();
+        languageManager.saveDefaultLanguageFiles();
     }
     
     @Override
     public void onEnable() {
+        reloadConfiguration();
+
         new CommandCompressedHearts(this).register();
         new CommandHP(this).register();
         
@@ -50,7 +51,16 @@ public final class HeartsPlugin extends ConfigurablePlugin {
     public void onDisable() {
         // Do Nothing
     }
-    
+
+    @Override
+    protected void reloadConfiguration() {
+        ConfigurationManager configurationManager = getConfigurationManager();
+        configurationManager.reload("config.yml");
+
+        LanguageManager languageManager = getLanguageManager();
+        languageManager.reloadLanguageFiles();
+    }
+
     public DisplayTask getDisplayTask() {
         return this.displayTask;
     }
