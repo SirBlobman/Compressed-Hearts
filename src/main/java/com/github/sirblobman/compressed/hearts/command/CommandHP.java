@@ -99,10 +99,12 @@ public class CommandHP extends PlayerCommand {
         
         long absorptionHearts = Math.round(absorptionHealth / 2.0D);
         String absorptionHeartsString = Long.toString(absorptionHearts);
-        
+
+        String targetName = target.getName();
         return message.replace("{health}", healthString).replace("{hearts}", heartsString)
                 .replace("{max_health}", maxHealthString).replace("{max_hearts}", maxHeartsString)
                 .replace("{absorb_health}", absorptionHealthString)
-                .replace("{absorb_hearts}", absorptionHeartsString);
+                .replace("{absorb_hearts}", absorptionHeartsString)
+                .replace("{target}", targetName);
     }
 }

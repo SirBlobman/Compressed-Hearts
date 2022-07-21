@@ -1,5 +1,6 @@
 package com.github.sirblobman.compressed.hearts.listener;
 
+import org.bukkit.GameMode;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -10,6 +11,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;

@@ -1,9 +1,13 @@
 package com.github.sirblobman.compressed.hearts.listener;
 
+import org.bukkit.GameMode;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
+import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 import com.github.sirblobman.compressed.hearts.event.PlayerChangeHeartsDisplayTypeEvent;

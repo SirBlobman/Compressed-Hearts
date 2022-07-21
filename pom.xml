@@ -24,7 +24,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
 
         <bukkit.plugin.main>com.github.sirblobman.compressed.hearts.HeartsPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>3.3.3</bukkit.plugin.version>
+        <bukkit.plugin.version>3.3.4</bukkit.plugin.version>
     </properties>
 
     <repositories>

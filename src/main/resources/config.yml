@@ -24,3 +24,7 @@ always-show: true
 # Should hearts be displayed instead of health?
 # Default: true
 show-hearts: true
+
+# Should spectators see the health of the player they are spectating?
+# Spectators will still see their own health if they are not spectating a player.
+spectate-health: true

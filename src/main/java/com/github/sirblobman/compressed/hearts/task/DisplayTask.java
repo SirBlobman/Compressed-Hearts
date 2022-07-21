@@ -6,7 +6,9 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,8 +43,10 @@ public final class DisplayTask extends BukkitRunnable {
     }
     
     public void sendDisplay(Player player) {
+        Player displayPlayer = getDisplayPlayer(player);
         boolean hearts = shouldUseHearts(player);
-        String message = (hearts ? getHeartsDisplayMessage(player) : getHealthDisplayMessage(player));
+
+        String message = (hearts ? getHeartsDisplayMessage(displayPlayer) : getHealthDisplayMessage(displayPlayer));
         if(message == null || message.isEmpty()) {
             return;
         }
@@ -344,5 +348,26 @@ public final class DisplayTask extends BukkitRunnable {
     public void removeBossBar(Player player) {
         BossBarHandler bossBarHandler = getBossBarHandler();
         bossBarHandler.removeBossBar(player);
+    }
+
+    private Player getDisplayPlayer(Player player) {
+        GameMode gameMode = player.getGameMode();
+        if(gameMode != GameMode.SPECTATOR) {
+            return player;
+        }
+
+        HeartsPlugin plugin = getPlugin();
+        ConfigurationManager configurationManager = plugin.getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        if(!configuration.getBoolean("spectate-health")) {
+            return player;
+        }
+
+        Entity spectatorTarget = player.getSpectatorTarget();
+        if(spectatorTarget instanceof Player) {
+            return (Player) spectatorTarget;
+        }
+
+        return player;
     }
 }
