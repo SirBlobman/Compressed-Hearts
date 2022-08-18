@@ -2,8 +2,11 @@ package com.github.sirblobman.compressed.hearts;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.sirblobman.api.bstats.bukkit.Metrics;
+import com.github.sirblobman.api.bstats.charts.SimplePie;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.CorePlugin;
+import com.github.sirblobman.api.language.Language;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.update.UpdateManager;
@@ -33,18 +36,11 @@ public final class HeartsPlugin extends ConfigurablePlugin {
     public void onEnable() {
         reloadConfiguration();
 
-        new CommandCompressedHearts(this).register();
-        new CommandHP(this).register();
-        
-        new ListenerHealth(this).register();
-        new ListenerDisplayType(this).register();
-        
-        DisplayTask displayTask = getDisplayTask();
-        displayTask.runTaskTimer(this, 5L, 5L);
-        
-        CorePlugin corePlugin = JavaPlugin.getPlugin(CorePlugin.class);
-        UpdateManager updateManager = corePlugin.getUpdateManager();
-        updateManager.addResource(this, 44024L);
+        registerCommands();
+        registerListeners();
+        registerTasks();
+        registerUpdateChecker();
+        registerbStats();
     }
     
     @Override
@@ -63,5 +59,37 @@ public final class HeartsPlugin extends ConfigurablePlugin {
 
     public DisplayTask getDisplayTask() {
         return this.displayTask;
+    }
+
+    private void registerCommands() {
+        new CommandCompressedHearts(this).register();
+        new CommandHP(this).register();
+    }
+
+    private void registerListeners() {
+        new ListenerHealth(this).register();
+        new ListenerDisplayType(this).register();
+    }
+
+    private void registerTasks() {
+        DisplayTask displayTask = getDisplayTask();
+        displayTask.runTaskTimer(this, 5L, 5L);
+    }
+
+    private void registerUpdateChecker() {
+        CorePlugin corePlugin = JavaPlugin.getPlugin(CorePlugin.class);
+        UpdateManager updateManager = corePlugin.getUpdateManager();
+        updateManager.addResource(this, 44024L);
+    }
+
+    private void registerbStats() {
+        Metrics metrics = new Metrics(this, 16177);
+        metrics.addCustomChart(new SimplePie("selected_language", this::getDefaultLanguageCode));
+    }
+
+    private String getDefaultLanguageCode() {
+        LanguageManager languageManager = getLanguageManager();
+        Language defaultLanguage = languageManager.getDefaultLanguage();
+        return (defaultLanguage == null ? "none" : defaultLanguage.getLanguageCode());
     }
 }
