@@ -16,9 +16,8 @@ public final class SubCommandHelp extends Command {
     
     public SubCommandHelp(HeartsPlugin plugin) {
         super(plugin, "help");
-        this.plugin = plugin;
-
         setPermissionName("ch.command.compressed-hearts.help");
+        this.plugin = plugin;
     }
     
     @NotNull
@@ -34,7 +33,7 @@ public final class SubCommandHelp extends Command {
     
     @Override
     protected boolean execute(CommandSender sender, String[] args) {
-        sendMessage(sender, "command.compressed-hearts.help-message", null, true);
+        sendMessage(sender, "command.compressed-hearts.help-message", null);
         return true;
     }
 }

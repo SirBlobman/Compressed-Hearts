@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.github.sirblobman.api.command.PlayerCommand;
 import com.github.sirblobman.api.language.LanguageManager;
+import com.github.sirblobman.api.language.Replacer;
 import com.github.sirblobman.api.nms.EntityHandler;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
@@ -21,6 +22,7 @@ public class CommandHP extends PlayerCommand {
     
     public CommandHP(HeartsPlugin plugin) {
         super(plugin, "hp");
+        setPermissionName("ch.command.hp");
         this.plugin = plugin;
     }
     
@@ -57,19 +59,13 @@ public class CommandHP extends PlayerCommand {
     }
     
     private void showSelf(Player player) {
-        LanguageManager languageManager = getLanguageManager();
-        String message = languageManager.getMessage(player, "command.hp.self-information",
-                null, true);
-        String realMessage = replaceVariables(player, player, message);
-        player.sendMessage(realMessage);
+        Replacer replacer = message -> replaceVariables(player, player, message);
+        sendMessage(player, "command.hp.self-information", replacer);
     }
     
     private void showOther(Player player, Player target) {
-        LanguageManager languageManager = getLanguageManager();
-        String message = languageManager.getMessage(player, "command.hp.other-information",
-                null, true);
-        String realMessage = replaceVariables(player, target, message);
-        player.sendMessage(realMessage);
+        Replacer replacer = message -> replaceVariables(player, target, message);
+        sendMessage(player, "command.hp.other-information", replacer);
     }
     
     private String replaceVariables(Player player, Player target, String message) {
@@ -78,8 +74,8 @@ public class CommandHP extends PlayerCommand {
         EntityHandler entityHandler = multiVersionHandler.getEntityHandler();
         PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
         
-        String decimalFormatString = languageManager.getMessage(player, "display.decimal-format",
-                null, true);
+        String decimalFormatString = languageManager.getMessageString(player, "display.decimal-format",
+                null);
         DecimalFormat decimalFormat = new DecimalFormat(decimalFormatString);
         
         double health = target.getHealth();

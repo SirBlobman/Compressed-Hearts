@@ -26,9 +26,8 @@ public final class SubCommandDisplay extends PlayerCommand {
     
     public SubCommandDisplay(HeartsPlugin plugin) {
         super(plugin, "display");
-        this.plugin = plugin;
-
         setPermissionName("ch.command.compressed-hearts.display");
+        this.plugin = plugin;
     }
     
     @NotNull
@@ -56,14 +55,14 @@ public final class SubCommandDisplay extends PlayerCommand {
         DisplayType newDisplayType = parseDisplayType(sub);
         if(newDisplayType == null) {
             Replacer replacer = message -> message.replace("{value}", sub);
-            sendMessage(player, "error.invalid-display-type", replacer, true);
+            sendMessage(player, "error.invalid-display-type", replacer);
             return true;
         }
         
         DisplayType oldDisplayType = getDisplayType(player);
         if(oldDisplayType == newDisplayType) {
             Replacer replacer = message -> message.replace("{value}", newDisplayType.name());
-            sendMessage(player, "command.compressed-hearts.display-already-matches", replacer, true);
+            sendMessage(player, "command.compressed-hearts.display-already-matches", replacer);
             return true;
         }
         
@@ -73,7 +72,7 @@ public final class SubCommandDisplay extends PlayerCommand {
         playerDataManager.save(player);
     
         Replacer replacer = message -> message.replace("{display-type}", newDisplayType.name());
-        sendMessage(player, "command.compressed-hearts.change-display", replacer, true);
+        sendMessage(player, "command.compressed-hearts.change-display", replacer);
     
         Event event = new PlayerChangeHeartsDisplayTypeEvent(player, oldDisplayType, newDisplayType);
         PluginManager pluginManager = Bukkit.getPluginManager();

@@ -1,48 +1,67 @@
+## Extra Information:
+## This is the default language file for Compressed Hearts.
+## The default language is "en_us", also known as English (United States).
+## Context will be added as YAML comments above the string.
+
+## The color scheme for messages is gold, yellow, and sometimes red.
+## Command feedback that is successful should always be green.
+## Error messages should always be red.
+## Variables in messages can be gray or white.
+
+## Messages use the MiniMessage format in non-strict mode.
+## More information about MiniMessage can be found here:
+## https://docs.adventure.kyori.net/minimessage/format.html
+
+---
+language-name: "en_us"
+decimal-format: "0.00"
+
 error:
-  no-permission: "&cMissing Permission: &7{permission}"
-  player-only: "&cOnly players can execute this command."
-  invalid-target: "&7{target}&c is not online or does not exist."
-  invalid-display-type: "&7{value}&c is not a valid display type."
+  no-permission: "<red>Missing Permission: <gray>{permission}</gray>.</red>"
+  player-only: "<red>That command can only be executed by a player.</red>"
+  console-only: "<red>That command can only be executed in the server console.</red>"
+  invalid-target: "<red><gray>{target}</gray> is not online or does not exist.</red>"
+  invalid-display-type: "<red><gray>{value}</gray> is not a valid display type.</red>"
 
 display:
   integer-format: "#,##0"
   decimal-format: "#,##0.00"
-  health-format: "&c{health}/{max_health} HP"
-  hearts-format: "&c{hearts}/{max_hearts} &4&l\u2764"
-  wither-health-format: "&2HP: &0&k{health}&c/&0&k{max_health}"
-  wither-hearts-format: "&0&k{hearts}&c/&0&k{max_hearts} &0&l\u2764"
-  absorption-health-format: " &e+ {absorb_health}"
-  absorption-hearts-format: " &e+ {absorb_hearts} &6&l\u2764"
+  health-format: "<red>{health}/{max_health} HP</red>"
+  hearts-format: "<red>{hearts}/{max_hearts}</red> <dark_red><bold>\u2764</bold></dark_red>"
+  wither-health-format: "<red><black><obfuscated>{health}</obfuscated></black>/<black><obfuscated>{max_health}</obfuscated></black> HP</red>"
+  wither-hearts-format: "<red><black><obfuscated>{hearts}</obfuscated></black>/<black><obfuscated>{max_hearts}</obfuscated></black></red> <dark_red><bold>\u2764</bold></dark_red>"
+  absorption-health-format: " <yellow>+ {absorb_health}</yellow>"
+  absorption-hearts-format: " <yellow>+ {absorb_hearts} <gold><bold>\u2764</bold></gold>"
 
 command:
   compressed-hearts:
     help-message:
-      - "&6&lCommand Usage:"
-      - "&6/compressed-hearts help&e: View this help page."
-      - "&6/compressed-hearts compress&e: Compress or uncompress your hearts."
-      - "&6/compressed-hearts display <boss/action/none>&e: Change the display type of your health."
-      - "&6/compressed-hearts reload&e: Reload the config for this plugin."
-      - "&6/hp [player]&e: View your health or the health of another player."
+      - "<gold><bold>Command Usage:</bold></gold>"
+      - "<gold>/compressed-hearts help</gold><yellow>: View this help page.</yellow>"
+      - "<gold>/compressed-hearts compress</gold><yellow>: Compress or uncompress your hearts.</yellow>"
+      - "<gold>/compressed-hearts display \\<boss/action/none></gold><yellow>: Change the display type of your health.</yellow>"
+      - "<gold>/compressed-hearts reload</gold><yellow>: Reload the config for this plugin.</yellow>"
+      - "<gold>/hp [player]</gold><yellow>: View your health or the health of another player.</yellow>"
 
     compress:
-      enabled: "&7Health Compression: &aON"
-      disabled: "&7Health Compression: &cOFF"
+      enabled: "<gold>Health Compression:</gold> <green>ON</green>"
+      disabled: "<gold>Health Compression:</gold> <red>OFF</red>"
 
-    display-already-matches: "&aYour current display type is already &7{value}&c."
-    change-display: "&aSuccessfully changed your display type to &7{display-type}&a."
-    reload-success: "&aSuccessfully reloaded the configuration files for compressed hearts."
+    display-already-matches: "<red>Your current display type is already <gray>{value}</gray>.</red>"
+    change-display: "<green>Successfully changed your display type to <gray>{display-type}</gray>.</green>"
+    reload-success: "<green>Successfully reloaded the configuration files for compressed hearts.</green>"
 
   hp:
     self-information:
-      - "&6&lYour Information:"
-      - "&6Health: &e{health}"
-      - "&6Hearts: &e{hearts}"
-      - "&6Absorption Health: &e{absorb_health}"
-      - "&6Absorption Hearts: &e{absorb_hearts}"
+      - "<gold><bold>Your Information:</bold></gold>"
+      - "<gold>Health:</gold> <yellow>{health}</yellow>"
+      - "<gold>Hearts:</gold> <yellow>{hearts}</yellow>"
+      - "<gold>Absorption Health:</gold> <yellow>{absorb_health}</yellow>"
+      - "<gold>Absorption Hearts:</gold> <yellow>{absorb_hearts}</yellow>"
 
     other-information:
-      - "&6&l{target}'s Information:"
-      - "&6Health: &e{health}"
-      - "&6Hearts: &e{hearts}"
-      - "&6Absorption Health: &e{absorb_health}"
-      - "&6Absorption Hearts: &e{absorb_hearts}"
+      - "<gold><bold>{target}'s Information:</bold></gold>"
+      - "<gold>Health:</gold> <yellow>{health}</yellow>"
+      - "<gold>Hearts:</gold> <yellow>{hearts}</yellow>"
+      - "<gold>Absorption Health:</gold> <yellow>{absorb_health}</yellow>"
+      - "<gold>Absorption Hearts:</gold> <yellow>{absorb_hearts}</yellow>"

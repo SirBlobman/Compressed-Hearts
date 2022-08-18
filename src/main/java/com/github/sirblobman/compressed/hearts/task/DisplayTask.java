@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -13,6 +14,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.github.sirblobman.api.adventure.adventure.bossbar.BossBar.Color;
+import com.github.sirblobman.api.adventure.adventure.bossbar.BossBar.Overlay;
+import com.github.sirblobman.api.adventure.adventure.text.Component;
+import com.github.sirblobman.api.adventure.adventure.text.minimessage.MiniMessage;
+import com.github.sirblobman.api.bossbar.BossBarHandler;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.api.language.Language;
@@ -22,7 +28,6 @@ import com.github.sirblobman.api.nms.EntityHandler;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.api.utility.Validate;
-import com.github.sirblobman.bossbar.BossBarHandler;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 import com.github.sirblobman.compressed.hearts.hook.HookPlaceholderAPI;
 import com.github.sirblobman.compressed.hearts.object.DisplayType;
@@ -46,8 +51,8 @@ public final class DisplayTask extends BukkitRunnable {
         Player displayPlayer = getDisplayPlayer(player);
         boolean hearts = shouldUseHearts(player);
 
-        String message = (hearts ? getHeartsDisplayMessage(displayPlayer) : getHealthDisplayMessage(displayPlayer));
-        if(message == null || message.isEmpty()) {
+        Component message = (hearts ? getHeartsDisplayMessage(displayPlayer) : getHealthDisplayMessage(displayPlayer));
+        if(Component.empty().equals(message)) {
             return;
         }
         
@@ -159,7 +164,7 @@ public final class DisplayTask extends BukkitRunnable {
         DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
         
         String path = ("display.decimal-format");
-        String decimalFormatString = languageManager.getMessage(player, path, null, false);
+        String decimalFormatString = languageManager.getMessageString(player, path, null);
         return new DecimalFormat(decimalFormatString, decimalFormatSymbols);
     }
     
@@ -175,7 +180,7 @@ public final class DisplayTask extends BukkitRunnable {
         DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
 
         String path = ("display.integer-format");
-        String decimalFormatString = languageManager.getMessage(player, path, null, false);
+        String decimalFormatString = languageManager.getMessageString(player, path, null);
         return new DecimalFormat(decimalFormatString, decimalFormatSymbols);
     }
     
@@ -277,10 +282,10 @@ public final class DisplayTask extends BukkitRunnable {
         }
     }
     
-    private String getHealthDisplayMessage(Player player) {
+    private Component getHealthDisplayMessage(Player player) {
         LanguageManager languageManager = getLanguageManager();
         boolean witherEffect = hasWitherEffect(player);
-        
+
         StringBuilder messageBuilder = new StringBuilder();
         if(hasHealth(player)) {
             String health = getHealthString(player);
@@ -289,7 +294,7 @@ public final class DisplayTask extends BukkitRunnable {
                     .replace("{max_health}", maxHealth);
             
             String messagePath = (witherEffect ? "display.wither-health-format" : "display.health-format");
-            String message = languageManager.getMessage(player, messagePath, replacer, true);
+            String message = languageManager.getMessageString(player, messagePath, replacer);
             messageBuilder.append(message);
         }
         
@@ -298,15 +303,17 @@ public final class DisplayTask extends BukkitRunnable {
             Replacer replacer = message -> message.replace("{absorb_health}", absorptionHealthString);
             
             String messagePath = ("display.absorption-health-format");
-            String message = languageManager.getMessage(player, messagePath, replacer, true);
+            String message = languageManager.getMessageString(player, messagePath, replacer);
             messageBuilder.append(message);
         }
         
-        String message = messageBuilder.toString();
-        return HookPlaceholderAPI.replace(player, message);
+        String messageString = messageBuilder.toString();
+        String messageReplaced = HookPlaceholderAPI.replace(player, messageString);
+        MiniMessage miniMessage = languageManager.getMiniMessage();
+        return miniMessage.deserialize(messageReplaced);
     }
     
-    private String getHeartsDisplayMessage(Player player) {
+    private Component getHeartsDisplayMessage(Player player) {
         LanguageManager languageManager = getLanguageManager();
         boolean witherEffect = hasWitherEffect(player);
         
@@ -318,7 +325,7 @@ public final class DisplayTask extends BukkitRunnable {
                     .replace("{max_hearts}", maxHearts);
             
             String messagePath = (witherEffect ? "display.wither-hearts-format" : "display.hearts-format");
-            String message = languageManager.getMessage(player, messagePath, replacer, true);
+            String message = languageManager.getMessageString(player, messagePath, replacer);
             messageBuilder.append(message);
         }
         
@@ -327,27 +334,34 @@ public final class DisplayTask extends BukkitRunnable {
             Replacer replacer = message -> message.replace("{absorb_hearts}", absorptionHeartsString);
             
             String messagePath = ("display.absorption-hearts-format");
-            String message = languageManager.getMessage(player, messagePath, replacer, true);
+            String message = languageManager.getMessageString(player, messagePath, replacer);
             messageBuilder.append(message);
         }
-        
-        String message = messageBuilder.toString();
-        return HookPlaceholderAPI.replace(player, message);
+
+        String messageString = messageBuilder.toString();
+        String messageReplaced = HookPlaceholderAPI.replace(player, messageString);
+        MiniMessage miniMessage = languageManager.getMiniMessage();
+        return miniMessage.deserialize(messageReplaced);
+    }
+
+    private void sendActionBar(Player player, Component message) {
+        LanguageManager languageManager = getLanguageManager();
+        languageManager.sendActionBar(player, message);
     }
     
-    private void sendActionBar(Player player, String message) {
-        PlayerHandler playerHandler = getPlayerHandler();
-        playerHandler.sendActionBar(player, message);
-    }
-    
-    private void sendBossBar(Player player, String message) {
+    private void sendBossBar(Player player, Component message) {
+        UUID playerId = player.getUniqueId();
+        String bossBarKey = ("ch-display-" + playerId);
         BossBarHandler bossBarHandler = getBossBarHandler();
-        bossBarHandler.updateBossBar(player, message, 1.0D, "BLUE", "SOLID");
+        bossBarHandler.updateBossBar(bossBarKey, message, 1.0F, Color.BLUE, Overlay.PROGRESS);
+        bossBarHandler.showBossBar(player, bossBarKey);
     }
     
     public void removeBossBar(Player player) {
+        UUID playerId = player.getUniqueId();
+        String bossBarKey = ("ch-display-" + playerId);
         BossBarHandler bossBarHandler = getBossBarHandler();
-        bossBarHandler.removeBossBar(player);
+        bossBarHandler.removeBossBar(bossBarKey);
     }
 
     private Player getDisplayPlayer(Player player) {

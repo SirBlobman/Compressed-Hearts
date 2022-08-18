@@ -11,7 +11,7 @@ import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 public final class CommandCompressedHearts extends Command {
     public CommandCompressedHearts(HeartsPlugin plugin) {
         super(plugin, "compressed-hearts");
-
+        setPermissionName("ch.command.compressed-hearts");
         addSubCommand(new SubCommandCompress(plugin));
         addSubCommand(new SubCommandDisplay(plugin));
         addSubCommand(new SubCommandHelp(plugin));

@@ -19,7 +19,6 @@ softdepend:
 commands:
   compressed-hearts:
     description: "Main command for the CompressedHearts plugin."
-    permission: "ch.command.compressed-hearts"
     usage: "/<command> help"
     aliases:
       - "compressedhearts"
@@ -29,7 +28,6 @@ commands:
 
   hp:
     description: "Check your current health."
-    permission: "ch.command.hp"
     usage: "/<command> [player]"
     aliases:
       - "hearts"

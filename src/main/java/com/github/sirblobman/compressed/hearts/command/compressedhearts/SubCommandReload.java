@@ -16,9 +16,8 @@ public final class SubCommandReload extends Command {
     
     public SubCommandReload(HeartsPlugin plugin) {
         super(plugin, "reload");
-        this.plugin = plugin;
-
         setPermissionName("ch.command.compressed-hearts.reload");
+        this.plugin = plugin;
     }
     
     @NotNull
@@ -35,7 +34,7 @@ public final class SubCommandReload extends Command {
     @Override
     protected boolean execute(CommandSender sender, String[] args) {
         this.plugin.reloadConfig();
-        sendMessage(sender, "command.compressed-hearts.reload-success", null, true);
+        sendMessage(sender, "command.compressed-hearts.reload-success", null);
         return true;
     }
 }
