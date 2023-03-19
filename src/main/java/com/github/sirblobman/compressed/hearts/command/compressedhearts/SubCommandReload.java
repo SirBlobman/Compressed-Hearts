@@ -34,7 +34,7 @@ public final class SubCommandReload extends Command {
     @Override
     protected boolean execute(CommandSender sender, String[] args) {
         this.plugin.reloadConfig();
-        sendMessage(sender, "command.compressed-hearts.reload-success", null);
+        sendMessage(sender, "command.compressed-hearts.reload-success");
         return true;
     }
 }

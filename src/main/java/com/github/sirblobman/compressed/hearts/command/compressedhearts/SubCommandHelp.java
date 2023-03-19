@@ -33,7 +33,7 @@ public final class SubCommandHelp extends Command {
     
     @Override
     protected boolean execute(CommandSender sender, String[] args) {
-        sendMessage(sender, "command.compressed-hearts.help-message", null);
+        sendMessage(sender, "command.compressed-hearts.help-message");
         return true;
     }
 }

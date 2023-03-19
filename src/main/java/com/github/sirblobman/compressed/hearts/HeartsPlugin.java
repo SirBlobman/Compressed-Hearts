@@ -36,11 +36,14 @@ public final class HeartsPlugin extends ConfigurablePlugin {
     public void onEnable() {
         reloadConfiguration();
 
+        LanguageManager languageManager = getLanguageManager();
+        languageManager.onPluginEnable();
+
         registerCommands();
         registerListeners();
         registerTasks();
         registerUpdateChecker();
-        registerbStats();
+        register_bStats();
     }
     
     @Override
@@ -54,7 +57,7 @@ public final class HeartsPlugin extends ConfigurablePlugin {
         configurationManager.reload("config.yml");
 
         LanguageManager languageManager = getLanguageManager();
-        languageManager.reloadLanguageFiles();
+        languageManager.reloadLanguages();
     }
 
     public DisplayTask getDisplayTask() {
@@ -82,7 +85,7 @@ public final class HeartsPlugin extends ConfigurablePlugin {
         updateManager.addResource(this, 44024L);
     }
 
-    private void registerbStats() {
+    private void register_bStats() {
         Metrics metrics = new Metrics(this, 16177);
         metrics.addCustomChart(new SimplePie("selected_language", this::getDefaultLanguageCode));
     }
@@ -90,6 +93,6 @@ public final class HeartsPlugin extends ConfigurablePlugin {
     private String getDefaultLanguageCode() {
         LanguageManager languageManager = getLanguageManager();
         Language defaultLanguage = languageManager.getDefaultLanguage();
-        return (defaultLanguage == null ? "none" : defaultLanguage.getLanguageCode());
+        return (defaultLanguage == null ? "none" : defaultLanguage.getLanguageName());
     }
 }

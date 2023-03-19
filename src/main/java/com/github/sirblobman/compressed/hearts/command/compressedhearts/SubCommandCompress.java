@@ -45,7 +45,7 @@ public final class SubCommandCompress extends PlayerCommand {
             playerDataManager.save(player);
             player.setHealthScaled(false);
             
-            sendMessage(player, "command.compressed-hearts.compress.disabled", null);
+            sendMessage(player, "command.compressed-hearts.compress.disabled");
             return true;
         }
         
@@ -54,7 +54,7 @@ public final class SubCommandCompress extends PlayerCommand {
         player.setHealthScaled(true);
         player.setHealthScale(20.0D);
         
-        sendMessage(player, "command.compressed-hearts.compress.enabled", null);
+        sendMessage(player, "command.compressed-hearts.compress.enabled");
         return true;
     }
 }

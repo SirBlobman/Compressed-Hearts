@@ -9,7 +9,10 @@ import org.bukkit.entity.Player;
 
 import com.github.sirblobman.api.command.PlayerCommand;
 import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.api.language.Replacer;
+import com.github.sirblobman.api.language.replacer.DoubleReplacer;
+import com.github.sirblobman.api.language.replacer.LongReplacer;
+import com.github.sirblobman.api.language.replacer.Replacer;
+import com.github.sirblobman.api.language.replacer.StringReplacer;
 import com.github.sirblobman.api.nms.EntityHandler;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
@@ -59,48 +62,41 @@ public class CommandHP extends PlayerCommand {
     }
     
     private void showSelf(Player player) {
-        Replacer replacer = message -> replaceVariables(player, player, message);
-        sendMessage(player, "command.hp.self-information", replacer);
+        Replacer[] replacerArray = getReplacerArray(player, player);
+        sendMessage(player, "command.hp.self-information", replacerArray);
     }
     
     private void showOther(Player player, Player target) {
-        Replacer replacer = message -> replaceVariables(player, target, message);
-        sendMessage(player, "command.hp.other-information", replacer);
+        Replacer[] replacerArray = getReplacerArray(player, target);
+        sendMessage(player, "command.hp.other-information", replacerArray);
     }
-    
-    private String replaceVariables(Player player, Player target, String message) {
-        LanguageManager languageManager = getLanguageManager();
+
+    private Replacer[] getReplacerArray(Player player, Player target) {
         MultiVersionHandler multiVersionHandler = this.plugin.getMultiVersionHandler();
         EntityHandler entityHandler = multiVersionHandler.getEntityHandler();
         PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
-        
-        String decimalFormatString = languageManager.getMessageString(player, "display.decimal-format",
-                null);
-        DecimalFormat decimalFormat = new DecimalFormat(decimalFormatString);
-        
+
+        LanguageManager languageManager = getLanguageManager();
+        DecimalFormat decimalFormat = languageManager.getDecimalFormat(player);
+
         double health = target.getHealth();
-        String healthString = decimalFormat.format(health);
-        
         long hearts = Math.round(health / 2.0D);
-        String heartsString = Long.toString(hearts);
-        
-        double maxHealth = entityHandler.getMaxHealth(player);
-        String maxHealthString = decimalFormat.format(maxHealth);
-        
+        Replacer healthReplacer = new DoubleReplacer("{health}", health, decimalFormat);
+        Replacer heartsReplacer = new LongReplacer("{hearts}", hearts);
+
+        double maxHealth = entityHandler.getMaxHealth(target);
         long maxHearts = Math.round(maxHealth / 2.0D);
-        String maxHeartsString = Long.toString(maxHearts);
-        
-        double absorptionHealth = playerHandler.getAbsorptionHearts(player);
-        String absorptionHealthString = decimalFormat.format(absorptionHealth);
-        
-        long absorptionHearts = Math.round(absorptionHealth / 2.0D);
-        String absorptionHeartsString = Long.toString(absorptionHearts);
+        Replacer maxHealthReplacer = new DoubleReplacer("{max_health}", maxHealth, decimalFormat);
+        Replacer maxHeartsReplacer = new LongReplacer("{max_hearts}", maxHearts);
+
+        double absorbHealth = playerHandler.getAbsorptionHearts(target);
+        long absorbHearts = Math.round(absorbHealth / 2.0D);
+        Replacer absorbHealthReplacer = new DoubleReplacer("{absorb_health}", absorbHealth, decimalFormat);
+        Replacer absorbHeartsReplacer = new LongReplacer("{absort_hearts}", absorbHearts);
 
         String targetName = target.getName();
-        return message.replace("{health}", healthString).replace("{hearts}", heartsString)
-                .replace("{max_health}", maxHealthString).replace("{max_hearts}", maxHeartsString)
-                .replace("{absorb_health}", absorptionHealthString)
-                .replace("{absorb_hearts}", absorptionHeartsString)
-                .replace("{target}", targetName);
+        Replacer targetReplacer = new StringReplacer("{target}", targetName);
+        return new Replacer[] {healthReplacer, heartsReplacer, maxHealthReplacer, maxHeartsReplacer,
+                absorbHealthReplacer, absorbHeartsReplacer, targetReplacer};
     }
 }

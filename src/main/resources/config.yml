@@ -1,5 +1,5 @@
-# Default Configuration for ${bukkit.plugin.prefix}
-# Made by SirBlobman for v${bukkit.plugin.version}
+# Default Configuration for ${pluginPrefix}
+# Made by SirBlobman for v${pluginVersion}
 
 # Should the plugin be allowed to check for updates?
 update-checker: true

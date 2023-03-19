@@ -13,7 +13,8 @@ import com.github.sirblobman.api.command.PlayerCommand;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.api.language.Replacer;
+import com.github.sirblobman.api.language.replacer.Replacer;
+import com.github.sirblobman.api.language.replacer.StringReplacer;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 import com.github.sirblobman.compressed.hearts.event.PlayerChangeHeartsDisplayTypeEvent;
 import com.github.sirblobman.compressed.hearts.object.DisplayType;
@@ -54,14 +55,14 @@ public final class SubCommandDisplay extends PlayerCommand {
         String sub = args[0];
         DisplayType newDisplayType = parseDisplayType(sub);
         if(newDisplayType == null) {
-            Replacer replacer = message -> message.replace("{value}", sub);
+            Replacer replacer = new StringReplacer("{value}", sub);
             sendMessage(player, "error.invalid-display-type", replacer);
             return true;
         }
         
         DisplayType oldDisplayType = getDisplayType(player);
         if(oldDisplayType == newDisplayType) {
-            Replacer replacer = message -> message.replace("{value}", newDisplayType.name());
+            Replacer replacer = new StringReplacer("{value}", newDisplayType.name());
             sendMessage(player, "command.compressed-hearts.display-already-matches", replacer);
             return true;
         }
@@ -71,7 +72,7 @@ public final class SubCommandDisplay extends PlayerCommand {
         playerData.set("display-type", newDisplayType.name());
         playerDataManager.save(player);
     
-        Replacer replacer = message -> message.replace("{display-type}", newDisplayType.name());
+        Replacer replacer = new StringReplacer("{display-type}", newDisplayType.name());
         sendMessage(player, "command.compressed-hearts.change-display", replacer);
     
         Event event = new PlayerChangeHeartsDisplayTypeEvent(player, oldDisplayType, newDisplayType);

@@ -1,9 +1,7 @@
 package com.github.sirblobman.compressed.hearts.task;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Collection;
-import java.util.Locale;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -21,9 +19,9 @@ import com.github.sirblobman.api.adventure.adventure.text.minimessage.MiniMessag
 import com.github.sirblobman.api.bossbar.BossBarHandler;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
-import com.github.sirblobman.api.language.Language;
 import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.api.language.Replacer;
+import com.github.sirblobman.api.language.replacer.Replacer;
+import com.github.sirblobman.api.language.replacer.StringReplacer;
 import com.github.sirblobman.api.nms.EntityHandler;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
@@ -60,18 +58,11 @@ public final class DisplayTask extends BukkitRunnable {
         if(displayType == null || displayType == DisplayType.NONE) {
             return;
         }
-        
-        switch(displayType) {
-            case BOSS_BAR:
-                sendBossBar(player, message);
-                break;
-            
-            case ACTION_BAR:
-                sendActionBar(player, message);
-                break;
-            
-            default:
-                break;
+
+        switch (displayType) {
+            case BOSS_BAR: sendBossBar(player, message); break;
+            case ACTION_BAR: sendActionBar(player, message); break;
+            default: break;
         }
     }
     
@@ -154,34 +145,12 @@ public final class DisplayTask extends BukkitRunnable {
     
     private DecimalFormat getDecimalFormat(Player player) {
         LanguageManager languageManager = getLanguageManager();
-        Language language = languageManager.getLanguage(player);
-        if(language == null) {
-            DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.US);
-            return new DecimalFormat("0.00", decimalFormatSymbols);
-        }
-
-        Locale locale = language.getJavaLocale().orElse(Locale.US);
-        DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
-        
-        String path = ("display.decimal-format");
-        String decimalFormatString = languageManager.getMessageString(player, path, null);
-        return new DecimalFormat(decimalFormatString, decimalFormatSymbols);
+        return languageManager.getDecimalFormat(player);
     }
     
     private DecimalFormat getIntegerFormat(Player player) {
         LanguageManager languageManager = getLanguageManager();
-        Language language = languageManager.getLanguage(player);
-        if(language == null) {
-            DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.US);
-            return new DecimalFormat("0", decimalFormatSymbols);
-        }
-
-        Locale locale = language.getJavaLocale().orElse(Locale.US);
-        DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
-
-        String path = ("display.integer-format");
-        String decimalFormatString = languageManager.getMessageString(player, path, null);
-        return new DecimalFormat(decimalFormatString, decimalFormatSymbols);
+        return languageManager.getDecimalFormat(player);
     }
     
     private boolean hasWitherEffect(Player player) {
@@ -290,17 +259,18 @@ public final class DisplayTask extends BukkitRunnable {
         if(hasHealth(player)) {
             String health = getHealthString(player);
             String maxHealth = getMaxHealthString(player);
-            Replacer replacer = message -> message.replace("{health}", health)
-                    .replace("{max_health}", maxHealth);
+
+            Replacer healthReplacer = new StringReplacer("{health}", health);
+            Replacer maxHealthReplacer = new StringReplacer("{max_health}", maxHealth);
             
             String messagePath = (witherEffect ? "display.wither-health-format" : "display.health-format");
-            String message = languageManager.getMessageString(player, messagePath, replacer);
+            String message = languageManager.getMessageString(player, messagePath, healthReplacer, maxHealthReplacer);
             messageBuilder.append(message);
         }
         
         if(hasAbsorptionHealth(player)) {
             String absorptionHealthString = getAbsorptionHealthString(player);
-            Replacer replacer = message -> message.replace("{absorb_health}", absorptionHealthString);
+            Replacer replacer = new StringReplacer("{absorb_health}", absorptionHealthString);
             
             String messagePath = ("display.absorption-health-format");
             String message = languageManager.getMessageString(player, messagePath, replacer);
@@ -321,17 +291,18 @@ public final class DisplayTask extends BukkitRunnable {
         if(hasHealth(player)) {
             String hearts = getHeartsString(player);
             String maxHearts = getMaxHeartsString(player);
-            Replacer replacer = message -> message.replace("{hearts}", hearts)
-                    .replace("{max_hearts}", maxHearts);
+
+            Replacer heartsReplacer = new StringReplacer("{hearts}", hearts);
+            Replacer maxHeartsReplacer = new StringReplacer("{max_hearts}", maxHearts);
             
             String messagePath = (witherEffect ? "display.wither-hearts-format" : "display.hearts-format");
-            String message = languageManager.getMessageString(player, messagePath, replacer);
+            String message = languageManager.getMessageString(player, messagePath, heartsReplacer, maxHeartsReplacer);
             messageBuilder.append(message);
         }
         
         if(hasAbsorptionHealth(player)) {
             String absorptionHeartsString = getAbsorptionHeartsString(player);
-            Replacer replacer = message -> message.replace("{absorb_hearts}", absorptionHeartsString);
+            Replacer replacer = new StringReplacer("{absorb_hearts}", absorptionHeartsString);
             
             String messagePath = ("display.absorption-hearts-format");
             String message = languageManager.getMessageString(player, messagePath, replacer);
