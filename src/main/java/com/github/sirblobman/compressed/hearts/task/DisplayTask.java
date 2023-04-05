@@ -12,10 +12,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.github.sirblobman.api.adventure.adventure.bossbar.BossBar.Color;
-import com.github.sirblobman.api.adventure.adventure.bossbar.BossBar.Overlay;
-import com.github.sirblobman.api.adventure.adventure.text.Component;
-import com.github.sirblobman.api.adventure.adventure.text.minimessage.MiniMessage;
+import com.github.sirblobman.api.shaded.adventure.bossbar.BossBar.Color;
+import com.github.sirblobman.api.shaded.adventure.bossbar.BossBar.Overlay;
+import com.github.sirblobman.api.shaded.adventure.text.Component;
+import com.github.sirblobman.api.shaded.adventure.text.minimessage.MiniMessage;
 import com.github.sirblobman.api.bossbar.BossBarHandler;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
