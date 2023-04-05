@@ -15,45 +15,45 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SubCommandCompress extends PlayerCommand {
     private final HeartsPlugin plugin;
-    
+
     public SubCommandCompress(HeartsPlugin plugin) {
         super(plugin, "compress");
         this.plugin = plugin;
 
         setPermissionName("ch.command.compressed-hearts.compress");
     }
-    
+
     @NotNull
     @Override
     protected LanguageManager getLanguageManager() {
         return this.plugin.getLanguageManager();
     }
-    
+
     @Override
     protected List<String> onTabComplete(Player player, String[] args) {
         return Collections.emptyList();
     }
-    
+
     @Override
     protected boolean execute(Player player, String[] args) {
         PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         boolean scaleHealth = playerData.getBoolean("scale-health");
-        
-        if(scaleHealth) {
+
+        if (scaleHealth) {
             playerData.set("scale-health", false);
             playerDataManager.save(player);
             player.setHealthScaled(false);
-            
+
             sendMessage(player, "command.compressed-hearts.compress.disabled");
             return true;
         }
-        
+
         playerData.set("scale-health", true);
         playerDataManager.save(player);
         player.setHealthScaled(true);
         player.setHealthScale(20.0D);
-        
+
         sendMessage(player, "command.compressed-hearts.compress.enabled");
         return true;
     }

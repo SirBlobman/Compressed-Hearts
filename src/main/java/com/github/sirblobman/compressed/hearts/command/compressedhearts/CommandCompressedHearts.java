@@ -17,12 +17,12 @@ public final class CommandCompressedHearts extends Command {
         addSubCommand(new SubCommandHelp(plugin));
         addSubCommand(new SubCommandReload(plugin));
     }
-    
+
     @Override
     protected List<String> onTabComplete(CommandSender sender, String[] args) {
         return Collections.emptyList();
     }
-    
+
     @Override
     protected boolean execute(CommandSender sender, String[] args) {
         return false;

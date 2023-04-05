@@ -2,13 +2,13 @@ package com.github.sirblobman.compressed.hearts;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.github.sirblobman.api.shaded.bstats.bukkit.Metrics;
-import com.github.sirblobman.api.shaded.bstats.charts.SimplePie;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.CorePlugin;
 import com.github.sirblobman.api.language.Language;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
+import com.github.sirblobman.api.shaded.bstats.bukkit.Metrics;
+import com.github.sirblobman.api.shaded.bstats.charts.SimplePie;
 import com.github.sirblobman.api.update.UpdateManager;
 import com.github.sirblobman.compressed.hearts.command.CommandHP;
 import com.github.sirblobman.compressed.hearts.command.compressedhearts.CommandCompressedHearts;
@@ -18,20 +18,20 @@ import com.github.sirblobman.compressed.hearts.task.DisplayTask;
 
 public final class HeartsPlugin extends ConfigurablePlugin {
     private final DisplayTask displayTask;
-    
+
     public HeartsPlugin() {
         this.displayTask = new DisplayTask(this);
     }
-    
+
     @Override
     public void onLoad() {
         ConfigurationManager configurationManager = getConfigurationManager();
         configurationManager.saveDefault("config.yml");
-        
+
         LanguageManager languageManager = getLanguageManager();
         languageManager.saveDefaultLanguageFiles();
     }
-    
+
     @Override
     public void onEnable() {
         reloadConfiguration();
@@ -45,7 +45,7 @@ public final class HeartsPlugin extends ConfigurablePlugin {
         registerUpdateChecker();
         register_bStats();
     }
-    
+
     @Override
     public void onDisable() {
         // Do Nothing

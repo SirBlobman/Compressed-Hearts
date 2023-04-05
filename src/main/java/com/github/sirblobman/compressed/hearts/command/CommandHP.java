@@ -22,50 +22,50 @@ import org.jetbrains.annotations.NotNull;
 
 public class CommandHP extends PlayerCommand {
     private final HeartsPlugin plugin;
-    
+
     public CommandHP(HeartsPlugin plugin) {
         super(plugin, "hp");
         setPermissionName("ch.command.hp");
         this.plugin = plugin;
     }
-    
+
     @NotNull
     @Override
     public LanguageManager getLanguageManager() {
         return this.plugin.getLanguageManager();
     }
-    
+
     @Override
     public List<String> onTabComplete(Player player, String[] args) {
-        if(args.length == 1) {
+        if (args.length == 1) {
             Set<String> valueSet = getOnlinePlayerNames();
             return getMatching(args[0], valueSet);
         }
-        
+
         return Collections.emptyList();
     }
-    
+
     @Override
     public boolean execute(Player player, String[] args) {
-        if(args.length < 1) {
+        if (args.length < 1) {
             showSelf(player);
             return true;
         }
-        
+
         Player target = findTarget(player, args[0]);
-        if(target == null) {
+        if (target == null) {
             return true;
         }
-        
+
         showOther(player, target);
         return true;
     }
-    
+
     private void showSelf(Player player) {
         Replacer[] replacerArray = getReplacerArray(player, player);
         sendMessage(player, "command.hp.self-information", replacerArray);
     }
-    
+
     private void showOther(Player player, Player target) {
         Replacer[] replacerArray = getReplacerArray(player, target);
         sendMessage(player, "command.hp.other-information", replacerArray);
@@ -96,7 +96,7 @@ public class CommandHP extends PlayerCommand {
 
         String targetName = target.getName();
         Replacer targetReplacer = new StringReplacer("{target}", targetName);
-        return new Replacer[] {healthReplacer, heartsReplacer, maxHealthReplacer, maxHeartsReplacer,
+        return new Replacer[]{healthReplacer, heartsReplacer, maxHealthReplacer, maxHeartsReplacer,
                 absorbHealthReplacer, absorbHeartsReplacer, targetReplacer};
     }
 }

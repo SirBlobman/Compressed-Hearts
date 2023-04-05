@@ -13,24 +13,24 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SubCommandReload extends Command {
     private final HeartsPlugin plugin;
-    
+
     public SubCommandReload(HeartsPlugin plugin) {
         super(plugin, "reload");
         setPermissionName("ch.command.compressed-hearts.reload");
         this.plugin = plugin;
     }
-    
+
     @NotNull
     @Override
     protected LanguageManager getLanguageManager() {
         return this.plugin.getLanguageManager();
     }
-    
+
     @Override
     protected List<String> onTabComplete(CommandSender sender, String[] args) {
         return Collections.emptyList();
     }
-    
+
     @Override
     protected boolean execute(CommandSender sender, String[] args) {
         this.plugin.reloadConfig();
