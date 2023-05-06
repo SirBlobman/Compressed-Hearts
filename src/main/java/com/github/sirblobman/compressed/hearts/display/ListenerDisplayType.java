@@ -1,4 +1,4 @@
-package com.github.sirblobman.compressed.hearts.listener;
+package com.github.sirblobman.compressed.hearts.display;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,8 +7,6 @@ import org.bukkit.event.EventPriority;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 import com.github.sirblobman.compressed.hearts.event.PlayerChangeHeartsDisplayTypeEvent;
-import com.github.sirblobman.compressed.hearts.object.DisplayType;
-import com.github.sirblobman.compressed.hearts.task.DisplayTask;
 
 public final class ListenerDisplayType extends PluginListener<HeartsPlugin> {
     public ListenerDisplayType(HeartsPlugin plugin) {

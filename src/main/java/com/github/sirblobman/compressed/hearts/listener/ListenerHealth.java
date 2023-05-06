@@ -1,5 +1,7 @@
 package com.github.sirblobman.compressed.hearts.listener;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -13,10 +15,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
-import com.github.sirblobman.compressed.hearts.task.DisplayTask;
+import com.github.sirblobman.compressed.hearts.display.DisplayTask;
 
 public final class ListenerHealth extends PluginListener<HeartsPlugin> {
-    public ListenerHealth(HeartsPlugin plugin) {
+    public ListenerHealth(@NotNull HeartsPlugin plugin) {
         super(plugin);
     }
 
@@ -54,7 +56,7 @@ public final class ListenerHealth extends PluginListener<HeartsPlugin> {
         check(player);
     }
 
-    private boolean shouldScaleHealth(Player player) {
+    private boolean shouldScaleHealth(@NotNull Player player) {
         HeartsPlugin plugin = getPlugin();
         PlayerDataManager playerDataManager = plugin.getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
@@ -67,12 +69,12 @@ public final class ListenerHealth extends PluginListener<HeartsPlugin> {
         return configuration.getBoolean("scale-health");
     }
 
-    private void check(Player player) {
+    private void check(@NotNull Player player) {
         checkScale(player);
         checkDisplay(player);
     }
 
-    private void checkScale(Player player) {
+    private void checkScale(@NotNull Player player) {
         if (shouldScaleHealth(player)) {
             player.setHealthScaled(true);
             player.setHealthScale(20.0D);
@@ -82,7 +84,7 @@ public final class ListenerHealth extends PluginListener<HeartsPlugin> {
         player.setHealthScaled(false);
     }
 
-    private void checkDisplay(Player player) {
+    private void checkDisplay(@NotNull Player player) {
         HeartsPlugin plugin = getPlugin();
         DisplayTask displayTask = plugin.getDisplayTask();
         displayTask.sendDisplay(player);

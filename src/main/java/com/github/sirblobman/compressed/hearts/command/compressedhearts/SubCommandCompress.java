@@ -3,40 +3,33 @@ package com.github.sirblobman.compressed.hearts.command.compressedhearts;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.github.sirblobman.api.command.PlayerCommand;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
-import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
-
-import org.jetbrains.annotations.NotNull;
 
 public final class SubCommandCompress extends PlayerCommand {
     private final HeartsPlugin plugin;
 
-    public SubCommandCompress(HeartsPlugin plugin) {
+    public SubCommandCompress(@NotNull HeartsPlugin plugin) {
         super(plugin, "compress");
-        this.plugin = plugin;
-
         setPermissionName("ch.command.compressed-hearts.compress");
-    }
-
-    @NotNull
-    @Override
-    protected LanguageManager getLanguageManager() {
-        return this.plugin.getLanguageManager();
+        this.plugin = plugin;
     }
 
     @Override
-    protected List<String> onTabComplete(Player player, String[] args) {
+    protected @NotNull List<String> onTabComplete(@NotNull Player player, String @NotNull [] args) {
         return Collections.emptyList();
     }
 
     @Override
-    protected boolean execute(Player player, String[] args) {
-        PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
+    protected boolean execute(@NotNull Player player, String @NotNull [] args) {
+        HeartsPlugin plugin = getHeartsPlugin();
+        PlayerDataManager playerDataManager = plugin.getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         boolean scaleHealth = playerData.getBoolean("scale-health");
 
@@ -56,5 +49,9 @@ public final class SubCommandCompress extends PlayerCommand {
 
         sendMessage(player, "command.compressed-hearts.compress.enabled");
         return true;
+    }
+
+    private @NotNull HeartsPlugin getHeartsPlugin() {
+        return this.plugin;
     }
 }

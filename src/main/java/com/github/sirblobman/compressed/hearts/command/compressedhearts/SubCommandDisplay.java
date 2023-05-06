@@ -2,6 +2,10 @@ package com.github.sirblobman.compressed.hearts.command.compressedhearts;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,17 +19,15 @@ import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.language.replacer.Replacer;
 import com.github.sirblobman.api.language.replacer.StringReplacer;
+import com.github.sirblobman.api.utility.ConfigurationHelper;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
+import com.github.sirblobman.compressed.hearts.display.DisplayType;
 import com.github.sirblobman.compressed.hearts.event.PlayerChangeHeartsDisplayTypeEvent;
-import com.github.sirblobman.compressed.hearts.object.DisplayType;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public final class SubCommandDisplay extends PlayerCommand {
     private final HeartsPlugin plugin;
 
-    public SubCommandDisplay(HeartsPlugin plugin) {
+    public SubCommandDisplay(@NotNull HeartsPlugin plugin) {
         super(plugin, "display");
         setPermissionName("ch.command.compressed-hearts.display");
         this.plugin = plugin;
@@ -38,16 +40,17 @@ public final class SubCommandDisplay extends PlayerCommand {
     }
 
     @Override
-    protected List<String> onTabComplete(Player player, String[] args) {
+    protected @NotNull List<String> onTabComplete(@NotNull Player player, String @NotNull [] args) {
         if (args.length == 1) {
-            return getMatching(args[0], "bossbar", "actionbar", "none");
+            Set<String> valueSet = getEnumNames(DisplayType.class);
+            return getMatching(args[0], valueSet);
         }
 
         return Collections.emptyList();
     }
 
     @Override
-    protected boolean execute(Player player, String[] args) {
+    protected boolean execute(@NotNull Player player, String @NotNull [] args) {
         if (args.length < 1) {
             return false;
         }
@@ -67,7 +70,7 @@ public final class SubCommandDisplay extends PlayerCommand {
             return true;
         }
 
-        PlayerDataManager playerDataManager = this.plugin.getPlayerDataManager();
+        PlayerDataManager playerDataManager = getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         playerData.set("display-type", newDisplayType.name());
         playerDataManager.save(player);
@@ -81,22 +84,21 @@ public final class SubCommandDisplay extends PlayerCommand {
         return true;
     }
 
-    private HeartsPlugin getHeartsPlugin() {
+    private @NotNull HeartsPlugin getHeartsPlugin() {
         return this.plugin;
     }
 
-    private ConfigurationManager getConfigurationManager() {
+    private @NotNull ConfigurationManager getConfigurationManager() {
         HeartsPlugin plugin = getHeartsPlugin();
         return plugin.getConfigurationManager();
     }
 
-    private PlayerDataManager getPlayerDataManager() {
+    private @NotNull PlayerDataManager getPlayerDataManager() {
         HeartsPlugin plugin = getHeartsPlugin();
         return plugin.getPlayerDataManager();
     }
 
-    @Nullable
-    private DisplayType parseDisplayType(String value) {
+    private @Nullable DisplayType parseDisplayType(String value) {
         if (value.equalsIgnoreCase("bossbar")) {
             value = "boss_bar";
         }
@@ -105,23 +107,20 @@ public final class SubCommandDisplay extends PlayerCommand {
             value = "action_bar";
         }
 
-        return DisplayType.parse(value);
+        return ConfigurationHelper.parseEnum(DisplayType.class, value, null);
     }
 
-    @NotNull
-    private DisplayType getDisplayType(Player player) {
+    private @NotNull DisplayType getDisplayType(Player player) {
         PlayerDataManager playerDataManager = getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         if (playerData.isSet("display-type")) {
             String displayTypeString = playerData.getString("display-type");
-            DisplayType displayType = DisplayType.parse(displayTypeString);
-            return (displayType == null ? DisplayType.NONE : displayType);
+            return ConfigurationHelper.parseEnum(DisplayType.class, displayTypeString, DisplayType.NONE);
         }
 
         ConfigurationManager configurationManager = getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
         String displayTypeString = configuration.getString("display-type");
-        DisplayType displayType = DisplayType.parse(displayTypeString);
-        return (displayType == null ? DisplayType.NONE : displayType);
+        return ConfigurationHelper.parseEnum(DisplayType.class, displayTypeString, DisplayType.NONE);
     }
 }

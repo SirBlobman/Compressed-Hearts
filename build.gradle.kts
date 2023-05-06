@@ -1,13 +1,40 @@
-val baseVersion = findProperty("version.base") ?: "invalid"
-val betaString = ((findProperty("version.beta") ?: "false") as String)
-val jenkinsBuildNumber = System.getenv("BUILD_NUMBER") ?: "Unofficial"
+val baseVersion = fetchProperty("version.base", "invalid")
+val betaString = fetchProperty("version.beta", "false")
+val jenkinsBuildNumber = fetchEnv("BUILD_NUMBER", null, "Unofficial")
 
 val betaBoolean = betaString.toBoolean()
 val betaVersion = if (betaBoolean) "Beta-" else ""
 val calculatedVersion = "$baseVersion.$betaVersion$jenkinsBuildNumber"
 
+fun fetchProperty(propertyName: String, defaultValue: String): String {
+    val found = findProperty(propertyName)
+    if (found != null) {
+        return found.toString()
+    }
+
+    return defaultValue
+}
+
+fun fetchEnv(envName: String, propertyName: String?, defaultValue: String): String {
+    val found = System.getenv(envName)
+    if (found != null) {
+        return found
+    }
+
+    if (propertyName != null) {
+        return fetchProperty(propertyName, defaultValue)
+    }
+
+    return defaultValue
+}
+
 plugins {
     id("java")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 repositories {
@@ -20,22 +47,21 @@ repositories {
 
 dependencies {
     // Java Dependencies
-    compileOnly("org.jetbrains:annotations:24.0.1") // JetBrains Annotations
-    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT") // Spigot API
+    compileOnly("org.jetbrains:annotations:24.0.1")
+
+    // Spigot API
+    val spigotVersion = fetchProperty("spigot.version", "")
+    compileOnly("org.spigotmc:spigot-api:$spigotVersion")
 
     // Plugin Dependencies
-    compileOnly("com.github.sirblobman.api:core:2.8-SNAPSHOT") // BlueSlimeCore
+    compileOnly("com.github.sirblobman.api:core:2.9-SNAPSHOT") // BlueSlimeCore
     compileOnly("me.clip:placeholderapi:2.11.3") // PlaceholderAPI
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks {
     named<Jar>("jar") {
-        archiveFileName.set("Compressed-Hearts-$calculatedVersion.jar")
+        archiveBaseName.set("Compressed-Hearts")
+        version = calculatedVersion
     }
 
     withType<JavaCompile> {
@@ -47,11 +73,11 @@ tasks {
     }
 
     processResources {
-        val pluginName = (findProperty("bukkit.plugin.name") ?: "") as String
-        val pluginPrefix = (findProperty("bukkit.plugin.prefix") ?: "") as String
-        val pluginDescription = (findProperty("bukkit.plugin.description") ?: "") as String
-        val pluginWebsite = (findProperty("bukkit.plugin.website") ?: "") as String
-        val pluginMainClass = (findProperty("bukkit.plugin.main") ?: "") as String
+        val pluginName = fetchProperty("bukkit.plugin.name", "")
+        val pluginPrefix = fetchProperty("bukkit.plugin.prefix", "")
+        val pluginDescription = fetchProperty("bukkit.plugin.description", "")
+        val pluginWebsite = fetchProperty("bukkit.plugin.website", "")
+        val pluginMainClass = fetchProperty("bukkit.plugin.main", "")
 
         filesMatching("plugin.yml") {
             expand(

@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.entity.Player;
 
 import com.github.sirblobman.api.command.PlayerCommand;
@@ -18,25 +20,23 @@ import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 
-import org.jetbrains.annotations.NotNull;
-
 public class CommandHP extends PlayerCommand {
     private final HeartsPlugin plugin;
 
-    public CommandHP(HeartsPlugin plugin) {
+    public CommandHP(@NotNull HeartsPlugin plugin) {
         super(plugin, "hp");
         setPermissionName("ch.command.hp");
         this.plugin = plugin;
     }
 
-    @NotNull
     @Override
-    public LanguageManager getLanguageManager() {
-        return this.plugin.getLanguageManager();
+    public @NotNull LanguageManager getLanguageManager() {
+        HeartsPlugin plugin = getHeartsPlugin();
+        return plugin.getLanguageManager();
     }
 
     @Override
-    public List<String> onTabComplete(Player player, String[] args) {
+    public @NotNull List<String> onTabComplete(@NotNull Player player, String @NotNull [] args) {
         if (args.length == 1) {
             Set<String> valueSet = getOnlinePlayerNames();
             return getMatching(args[0], valueSet);
@@ -46,7 +46,7 @@ public class CommandHP extends PlayerCommand {
     }
 
     @Override
-    public boolean execute(Player player, String[] args) {
+    public boolean execute(@NotNull Player player, String @NotNull [] args) {
         if (args.length < 1) {
             showSelf(player);
             return true;
@@ -61,18 +61,23 @@ public class CommandHP extends PlayerCommand {
         return true;
     }
 
-    private void showSelf(Player player) {
+    private @NotNull HeartsPlugin getHeartsPlugin() {
+        return this.plugin;
+    }
+
+    private void showSelf(@NotNull Player player) {
         Replacer[] replacerArray = getReplacerArray(player, player);
         sendMessage(player, "command.hp.self-information", replacerArray);
     }
 
-    private void showOther(Player player, Player target) {
+    private void showOther(@NotNull Player player, @NotNull Player target) {
         Replacer[] replacerArray = getReplacerArray(player, target);
         sendMessage(player, "command.hp.other-information", replacerArray);
     }
 
-    private Replacer[] getReplacerArray(Player player, Player target) {
-        MultiVersionHandler multiVersionHandler = this.plugin.getMultiVersionHandler();
+    private Replacer @NotNull [] getReplacerArray(@NotNull Player player, @NotNull Player target) {
+        HeartsPlugin plugin = getHeartsPlugin();
+        MultiVersionHandler multiVersionHandler = plugin.getMultiVersionHandler();
         EntityHandler entityHandler = multiVersionHandler.getEntityHandler();
         PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
 

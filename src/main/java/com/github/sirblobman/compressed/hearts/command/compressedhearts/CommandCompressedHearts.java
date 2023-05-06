@@ -3,6 +3,8 @@ package com.github.sirblobman.compressed.hearts.command.compressedhearts;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.command.CommandSender;
 
 import com.github.sirblobman.api.command.Command;
@@ -19,12 +21,12 @@ public final class CommandCompressedHearts extends Command {
     }
 
     @Override
-    protected List<String> onTabComplete(CommandSender sender, String[] args) {
+    protected @NotNull List<String> onTabComplete(@NotNull CommandSender sender, String @NotNull [] args) {
         return Collections.emptyList();
     }
 
     @Override
-    protected boolean execute(CommandSender sender, String[] args) {
+    protected boolean execute(@NotNull CommandSender sender, String @NotNull [] args) {
         return false;
     }
 }

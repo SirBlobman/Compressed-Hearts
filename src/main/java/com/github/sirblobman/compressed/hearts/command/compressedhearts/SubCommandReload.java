@@ -3,37 +3,30 @@ package com.github.sirblobman.compressed.hearts.command.compressedhearts;
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.command.CommandSender;
-
-import com.github.sirblobman.api.command.Command;
-import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.compressed.hearts.HeartsPlugin;
-
 import org.jetbrains.annotations.NotNull;
 
-public final class SubCommandReload extends Command {
-    private final HeartsPlugin plugin;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
 
-    public SubCommandReload(HeartsPlugin plugin) {
+import com.github.sirblobman.api.command.Command;
+import com.github.sirblobman.compressed.hearts.HeartsPlugin;
+
+public final class SubCommandReload extends Command {
+    public SubCommandReload(@NotNull HeartsPlugin plugin) {
         super(plugin, "reload");
         setPermissionName("ch.command.compressed-hearts.reload");
-        this.plugin = plugin;
-    }
-
-    @NotNull
-    @Override
-    protected LanguageManager getLanguageManager() {
-        return this.plugin.getLanguageManager();
     }
 
     @Override
-    protected List<String> onTabComplete(CommandSender sender, String[] args) {
+    protected @NotNull List<String> onTabComplete(@NotNull CommandSender sender, String @NotNull [] args) {
         return Collections.emptyList();
     }
 
     @Override
-    protected boolean execute(CommandSender sender, String[] args) {
-        this.plugin.reloadConfig();
+    protected boolean execute(@NotNull CommandSender sender, String @NotNull [] args) {
+        JavaPlugin plugin = getPlugin();
+        plugin.reloadConfig();
+
         sendMessage(sender, "command.compressed-hearts.reload-success");
         return true;
     }

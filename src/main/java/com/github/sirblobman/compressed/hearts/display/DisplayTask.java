@@ -1,8 +1,10 @@
-package com.github.sirblobman.compressed.hearts.task;
+package com.github.sirblobman.compressed.hearts.display;
 
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.UUID;
+
+import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -10,31 +12,31 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.sirblobman.api.bossbar.BossBarHandler;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
+import com.github.sirblobman.api.folia.details.TaskDetails;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.language.replacer.Replacer;
 import com.github.sirblobman.api.language.replacer.StringReplacer;
 import com.github.sirblobman.api.nms.EntityHandler;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
+import com.github.sirblobman.api.utility.ConfigurationHelper;
+import com.github.sirblobman.compressed.hearts.HeartsPlugin;
+import com.github.sirblobman.compressed.hearts.hook.HookPlaceholderAPI;
 import com.github.sirblobman.api.shaded.adventure.bossbar.BossBar.Color;
 import com.github.sirblobman.api.shaded.adventure.bossbar.BossBar.Overlay;
 import com.github.sirblobman.api.shaded.adventure.text.Component;
 import com.github.sirblobman.api.shaded.adventure.text.minimessage.MiniMessage;
-import com.github.sirblobman.api.utility.Validate;
-import com.github.sirblobman.compressed.hearts.HeartsPlugin;
-import com.github.sirblobman.compressed.hearts.hook.HookPlaceholderAPI;
-import com.github.sirblobman.compressed.hearts.object.DisplayType;
 
-public final class DisplayTask extends BukkitRunnable {
+public final class DisplayTask extends TaskDetails {
     private final HeartsPlugin plugin;
 
-    public DisplayTask(HeartsPlugin plugin) {
-        this.plugin = Validate.notNull(plugin, "plugin must not be null!");
+    public DisplayTask(@NotNull HeartsPlugin plugin) {
+        super(plugin);
+        this.plugin = plugin;
     }
 
     @Override
@@ -55,7 +57,7 @@ public final class DisplayTask extends BukkitRunnable {
         }
 
         DisplayType displayType = getDisplayType(player);
-        if (displayType == null || displayType == DisplayType.NONE) {
+        if (displayType == DisplayType.NONE) {
             return;
         }
 
@@ -71,46 +73,46 @@ public final class DisplayTask extends BukkitRunnable {
         }
     }
 
-    private HeartsPlugin getPlugin() {
+    private @NotNull HeartsPlugin getHeartsPlugin() {
         return this.plugin;
     }
 
-    private ConfigurationManager getConfigurationManager() {
-        HeartsPlugin plugin = getPlugin();
+    private @NotNull ConfigurationManager getConfigurationManager() {
+        HeartsPlugin plugin = getHeartsPlugin();
         return plugin.getConfigurationManager();
     }
 
-    private LanguageManager getLanguageManager() {
-        HeartsPlugin plugin = getPlugin();
+    private @NotNull LanguageManager getLanguageManager() {
+        HeartsPlugin plugin = getHeartsPlugin();
         return plugin.getLanguageManager();
     }
 
-    private PlayerDataManager getPlayerDataManager() {
-        HeartsPlugin plugin = getPlugin();
+    private @NotNull PlayerDataManager getPlayerDataManager() {
+        HeartsPlugin plugin = getHeartsPlugin();
         return plugin.getPlayerDataManager();
     }
 
-    private MultiVersionHandler getMultiVersionHandler() {
-        HeartsPlugin plugin = getPlugin();
+    private @NotNull MultiVersionHandler getMultiVersionHandler() {
+        HeartsPlugin plugin = getHeartsPlugin();
         return plugin.getMultiVersionHandler();
     }
 
-    private PlayerHandler getPlayerHandler() {
+    private @NotNull PlayerHandler getPlayerHandler() {
         MultiVersionHandler multiVersionHandler = getMultiVersionHandler();
         return multiVersionHandler.getPlayerHandler();
     }
 
-    private EntityHandler getEntityHandler() {
+    private @NotNull EntityHandler getEntityHandler() {
         MultiVersionHandler multiVersionHandler = getMultiVersionHandler();
         return multiVersionHandler.getEntityHandler();
     }
 
-    private BossBarHandler getBossBarHandler() {
+    private @NotNull BossBarHandler getBossBarHandler() {
         MultiVersionHandler multiVersionHandler = getMultiVersionHandler();
         return multiVersionHandler.getBossBarHandler();
     }
 
-    private boolean shouldAlwaysShow(Player player) {
+    private boolean shouldAlwaysShow(@NotNull Player player) {
         PlayerDataManager playerDataManager = getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         if (playerData.isSet("always-show")) {
@@ -122,7 +124,7 @@ public final class DisplayTask extends BukkitRunnable {
         return configuration.getBoolean("always-show");
     }
 
-    private boolean shouldUseHearts(Player player) {
+    private boolean shouldUseHearts(@NotNull Player player) {
         PlayerDataManager playerDataManager = getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         if (playerData.isSet("show-hearts")) {
@@ -134,79 +136,70 @@ public final class DisplayTask extends BukkitRunnable {
         return configuration.getBoolean("show-hearts");
     }
 
-    private DisplayType getDisplayType(Player player) {
+    private @NotNull DisplayType getDisplayType(@NotNull Player player) {
         PlayerDataManager playerDataManager = getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         if (playerData.isSet("display-type")) {
             String displayTypeString = playerData.getString("display-type");
-            return DisplayType.parse(displayTypeString);
+            return ConfigurationHelper.parseEnum(DisplayType.class, displayTypeString, DisplayType.NONE);
         }
 
         ConfigurationManager configurationManager = getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
         String displayTypeString = configuration.getString("display-type");
-        return DisplayType.parse(displayTypeString);
+        return ConfigurationHelper.parseEnum(DisplayType.class, displayTypeString, DisplayType.NONE);
     }
 
-    private DecimalFormat getDecimalFormat(Player player) {
+    private @NotNull DecimalFormat getDecimalFormat(@NotNull Player player) {
         LanguageManager languageManager = getLanguageManager();
         return languageManager.getDecimalFormat(player);
     }
 
-    private DecimalFormat getIntegerFormat(Player player) {
-        LanguageManager languageManager = getLanguageManager();
-        return languageManager.getDecimalFormat(player);
+    private @NotNull DecimalFormat getIntegerFormat(@NotNull Player player) {
+        return getDecimalFormat(player);
     }
 
-    private boolean hasWitherEffect(Player player) {
-        if (player == null) {
-            return false;
-        }
-
+    private boolean hasWitherEffect(@NotNull Player player) {
         return player.hasPotionEffect(PotionEffectType.WITHER);
     }
 
-    private double getHealth(Player player) {
-        if (player == null) {
-            return 0.0D;
-        }
-
+    private double getHealth(@NotNull Player player) {
         return player.getHealth();
     }
 
-    private boolean hasHealth(Player player) {
+    private boolean hasHealth(@NotNull Player player) {
         double health = getHealth(player);
         return (health > 0.0D);
     }
 
-    private String getHealthString(Player player) {
+    private @NotNull String getHealthString(@NotNull Player player) {
         double health = getHealth(player);
         DecimalFormat decimalFormat = getDecimalFormat(player);
         return decimalFormat.format(health);
     }
 
-    private double getMaxHealth(Player player) {
+    private double getMaxHealth(@NotNull Player player) {
         EntityHandler entityHandler = getEntityHandler();
         return entityHandler.getMaxHealth(player);
     }
 
-    private String getMaxHealthString(Player player) {
+    private @NotNull String getMaxHealthString(@NotNull Player player) {
         double maxHealth = getMaxHealth(player);
         DecimalFormat decimalFormat = getDecimalFormat(player);
         return decimalFormat.format(maxHealth);
     }
 
-    private double getAbsorptionHealth(Player player) {
+    private double getAbsorptionHealth(@NotNull Player player) {
         PlayerHandler playerHandler = getPlayerHandler();
         return playerHandler.getAbsorptionHearts(player);
     }
 
-    private boolean hasAbsorptionHealth(Player player) {
+    private boolean hasAbsorptionHealth(@NotNull Player player) {
         double absorptionHealth = getAbsorptionHealth(player);
         return (absorptionHealth > 0.0D);
     }
 
-    private String getAbsorptionHealthString(Player player) {
+    private @NotNull String getAbsorptionHealthString(@NotNull Player player) {
         double absorptionHealth = getAbsorptionHealth(player);
         DecimalFormat decimalFormat = getDecimalFormat(player);
         return decimalFormat.format(absorptionHealth);
@@ -217,46 +210,46 @@ public final class DisplayTask extends BukkitRunnable {
         return Math.round(ceil);
     }
 
-    private long getHearts(Player player) {
+    private long getHearts(@NotNull Player player) {
         double health = getHealth(player);
         return ceil(health / 2.0D);
     }
 
-    private long getMaxHearts(Player player) {
+    private long getMaxHearts(@NotNull Player player) {
         double maxHealth = getMaxHealth(player);
         return ceil(maxHealth / 2.0D);
     }
 
-    private long getAbsorptionHearts(Player player) {
+    private long getAbsorptionHearts(@NotNull Player player) {
         double absorptionHealth = getAbsorptionHealth(player);
         return ceil(absorptionHealth / 2.0D);
     }
 
-    private String getHeartsString(Player player) {
+    private @NotNull String getHeartsString(@NotNull Player player) {
         long hearts = getHearts(player);
         DecimalFormat integerFormat = getIntegerFormat(player);
         return integerFormat.format(hearts);
     }
 
-    private String getMaxHeartsString(Player player) {
+    private @NotNull String getMaxHeartsString(@NotNull Player player) {
         long maxHearts = getMaxHearts(player);
         DecimalFormat integerFormat = getIntegerFormat(player);
         return integerFormat.format(maxHearts);
     }
 
-    private String getAbsorptionHeartsString(Player player) {
+    private @NotNull String getAbsorptionHeartsString(@NotNull Player player) {
         long absorptionHearts = getAbsorptionHearts(player);
         DecimalFormat integerFormat = getIntegerFormat(player);
         return integerFormat.format(absorptionHearts);
     }
 
-    private void checkDisplay(Player player) {
+    private void checkDisplay(@NotNull Player player) {
         if (shouldAlwaysShow(player)) {
             sendDisplay(player);
         }
     }
 
-    private Component getHealthDisplayMessage(Player player) {
+    private @NotNull Component getHealthDisplayMessage(@NotNull Player player) {
         LanguageManager languageManager = getLanguageManager();
         boolean witherEffect = hasWitherEffect(player);
 
@@ -288,7 +281,7 @@ public final class DisplayTask extends BukkitRunnable {
         return miniMessage.deserialize(messageReplaced);
     }
 
-    private Component getHeartsDisplayMessage(Player player) {
+    private @NotNull Component getHeartsDisplayMessage(@NotNull Player player) {
         LanguageManager languageManager = getLanguageManager();
         boolean witherEffect = hasWitherEffect(player);
 
@@ -320,12 +313,12 @@ public final class DisplayTask extends BukkitRunnable {
         return miniMessage.deserialize(messageReplaced);
     }
 
-    private void sendActionBar(Player player, Component message) {
+    private void sendActionBar(@NotNull Player player, @NotNull Component message) {
         LanguageManager languageManager = getLanguageManager();
         languageManager.sendActionBar(player, message);
     }
 
-    private void sendBossBar(Player player, Component message) {
+    private void sendBossBar(@NotNull Player player, @NotNull Component message) {
         UUID playerId = player.getUniqueId();
         String bossBarKey = ("ch-display-" + playerId);
         BossBarHandler bossBarHandler = getBossBarHandler();
@@ -333,20 +326,20 @@ public final class DisplayTask extends BukkitRunnable {
         bossBarHandler.showBossBar(player, bossBarKey);
     }
 
-    public void removeBossBar(Player player) {
+    public void removeBossBar(@NotNull Player player) {
         UUID playerId = player.getUniqueId();
         String bossBarKey = ("ch-display-" + playerId);
         BossBarHandler bossBarHandler = getBossBarHandler();
         bossBarHandler.removeBossBar(bossBarKey);
     }
 
-    private Player getDisplayPlayer(Player player) {
+    private @NotNull Player getDisplayPlayer(@NotNull Player player) {
         GameMode gameMode = player.getGameMode();
         if (gameMode != GameMode.SPECTATOR) {
             return player;
         }
 
-        HeartsPlugin plugin = getPlugin();
+        HeartsPlugin plugin = getHeartsPlugin();
         ConfigurationManager configurationManager = plugin.getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
         if (!configuration.getBoolean("spectate-health")) {
