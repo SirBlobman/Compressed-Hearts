@@ -37,6 +37,8 @@ public final class DisplayTask extends TaskDetails {
     public DisplayTask(@NotNull HeartsPlugin plugin) {
         super(plugin);
         this.plugin = plugin;
+        setDelay(5L);
+        setPeriod(5L);
     }
 
     @Override
