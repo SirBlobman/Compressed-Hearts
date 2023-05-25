@@ -22,7 +22,7 @@ import com.github.sirblobman.api.language.replacer.StringReplacer;
 import com.github.sirblobman.api.utility.ConfigurationHelper;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
 import com.github.sirblobman.compressed.hearts.display.DisplayType;
-import com.github.sirblobman.compressed.hearts.event.PlayerChangeHeartsDisplayTypeEvent;
+import com.github.sirblobman.compressed.hearts.event.PlayerChangeDisplayTypeEvent;
 
 public final class SubCommandDisplay extends PlayerCommand {
     private final HeartsPlugin plugin;
@@ -78,7 +78,7 @@ public final class SubCommandDisplay extends PlayerCommand {
         Replacer replacer = new StringReplacer("{display-type}", newDisplayType.name());
         sendMessage(player, "command.compressed-hearts.change-display", replacer);
 
-        Event event = new PlayerChangeHeartsDisplayTypeEvent(player, oldDisplayType, newDisplayType);
+        Event event = new PlayerChangeDisplayTypeEvent(player, oldDisplayType, newDisplayType);
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.callEvent(event);
         return true;

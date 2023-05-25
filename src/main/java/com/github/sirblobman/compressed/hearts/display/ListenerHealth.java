@@ -1,4 +1,4 @@
-package com.github.sirblobman.compressed.hearts.listener;
+package com.github.sirblobman.compressed.hearts.display;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,11 +15,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.compressed.hearts.HeartsPlugin;
-import com.github.sirblobman.compressed.hearts.display.DisplayTask;
 
 public final class ListenerHealth extends PluginListener<HeartsPlugin> {
-    public ListenerHealth(@NotNull HeartsPlugin plugin) {
+    private final ListenerDisplayType listener;
+
+    public ListenerHealth(@NotNull HeartsPlugin plugin, @NotNull ListenerDisplayType listener) {
         super(plugin);
+        this.listener = listener;
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -84,9 +86,15 @@ public final class ListenerHealth extends PluginListener<HeartsPlugin> {
         player.setHealthScaled(false);
     }
 
+    private @NotNull ListenerDisplayType getListener() {
+        return this.listener;
+    }
+
     private void checkDisplay(@NotNull Player player) {
-        HeartsPlugin plugin = getPlugin();
-        DisplayTask displayTask = plugin.getDisplayTask();
-        displayTask.sendDisplay(player);
+        ListenerDisplayType listener = getListener();
+        PlayerDisplayTask task = listener.getDisplayTask(player);
+        if (task != null) {
+            task.sendDisplay(player);
+        }
     }
 }

@@ -6,27 +6,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.CorePlugin;
-import com.github.sirblobman.api.folia.FoliaHelper;
-import com.github.sirblobman.api.folia.scheduler.TaskScheduler;
 import com.github.sirblobman.api.language.Language;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.update.SpigotUpdateManager;
 import com.github.sirblobman.compressed.hearts.command.CommandHP;
 import com.github.sirblobman.compressed.hearts.command.compressedhearts.CommandCompressedHearts;
-import com.github.sirblobman.compressed.hearts.display.DisplayTask;
 import com.github.sirblobman.compressed.hearts.display.ListenerDisplayType;
-import com.github.sirblobman.compressed.hearts.listener.ListenerHealth;
+import com.github.sirblobman.compressed.hearts.display.ListenerHealth;
 import com.github.sirblobman.api.shaded.bstats.bukkit.Metrics;
 import com.github.sirblobman.api.shaded.bstats.charts.SimplePie;
 
 public final class HeartsPlugin extends ConfigurablePlugin {
-    private final DisplayTask displayTask;
-
-    public HeartsPlugin() {
-        this.displayTask = new DisplayTask(this);
-    }
-
     @Override
     public void onLoad() {
         ConfigurationManager configurationManager = getConfigurationManager();
@@ -45,7 +36,6 @@ public final class HeartsPlugin extends ConfigurablePlugin {
 
         registerCommands();
         registerListeners();
-        registerTasks();
         registerUpdateChecker();
         register_bStats();
     }
@@ -64,25 +54,15 @@ public final class HeartsPlugin extends ConfigurablePlugin {
         languageManager.reloadLanguages();
     }
 
-    public @NotNull DisplayTask getDisplayTask() {
-        return this.displayTask;
-    }
-
     private void registerCommands() {
         new CommandCompressedHearts(this).register();
         new CommandHP(this).register();
     }
 
     private void registerListeners() {
-        new ListenerHealth(this).register();
-        new ListenerDisplayType(this).register();
-    }
-
-    private void registerTasks() {
-        FoliaHelper foliaHelper = getFoliaHelper();
-        TaskScheduler scheduler = foliaHelper.getScheduler();
-        DisplayTask displayTask = getDisplayTask();
-        scheduler.scheduleTask(displayTask);
+        ListenerDisplayType displayTypeListener = new ListenerDisplayType(this);
+        new ListenerHealth(this, displayTypeListener).register();
+        displayTypeListener.register();
     }
 
     private void registerUpdateChecker() {

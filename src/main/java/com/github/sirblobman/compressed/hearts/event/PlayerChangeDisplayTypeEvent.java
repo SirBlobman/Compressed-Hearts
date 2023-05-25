@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerEvent;
 
 import com.github.sirblobman.compressed.hearts.display.DisplayType;
 
-public final class PlayerChangeHeartsDisplayTypeEvent extends PlayerEvent {
+public final class PlayerChangeDisplayTypeEvent extends PlayerEvent {
     private static final HandlerList HANDLER_LIST;
 
     static {
@@ -18,8 +18,8 @@ public final class PlayerChangeHeartsDisplayTypeEvent extends PlayerEvent {
     private final DisplayType oldType;
     private final DisplayType newType;
 
-    public PlayerChangeHeartsDisplayTypeEvent(@NotNull Player player, @NotNull DisplayType oldType,
-                                              @NotNull DisplayType newType) {
+    public PlayerChangeDisplayTypeEvent(@NotNull Player player, @NotNull DisplayType oldType,
+                                        @NotNull DisplayType newType) {
         super(player);
         this.oldType = oldType;
         this.newType = newType;

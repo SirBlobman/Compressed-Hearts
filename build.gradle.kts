@@ -40,9 +40,8 @@ java {
 repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://nexus.sirblobman.xyz/public/")
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 }
 
 dependencies {
@@ -50,12 +49,11 @@ dependencies {
     compileOnly("org.jetbrains:annotations:24.0.1")
 
     // Spigot API
-    val spigotVersion = fetchProperty("spigot.version", "")
+    val spigotVersion = fetchProperty("version.spigot", "")
     compileOnly("org.spigotmc:spigot-api:$spigotVersion")
 
     // Plugin Dependencies
     compileOnly("com.github.sirblobman.api:core:2.9-SNAPSHOT") // BlueSlimeCore
-    compileOnly("me.clip:placeholderapi:2.11.3") // PlaceholderAPI
 }
 
 tasks {
