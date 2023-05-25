@@ -4,7 +4,7 @@ val jenkinsBuildNumber = fetchEnv("BUILD_NUMBER", null, "Unofficial")
 
 val betaBoolean = betaString.toBoolean()
 val betaVersion = if (betaBoolean) "Beta-" else ""
-val calculatedVersion = "$baseVersion.$betaVersion$jenkinsBuildNumber"
+version = "$baseVersion.$betaVersion$jenkinsBuildNumber"
 
 fun fetchProperty(propertyName: String, defaultValue: String): String {
     val found = findProperty(propertyName)
@@ -59,15 +59,18 @@ dependencies {
 tasks {
     named<Jar>("jar") {
         archiveBaseName.set("Compressed-Hearts")
-        version = calculatedVersion
     }
 
     withType<JavaCompile> {
         options.encoding = "UTF-8"
+        options.compilerArgs.add("-Xlint:deprecation")
+        options.compilerArgs.add("-Xlint:unchecked")
     }
 
     withType<Javadoc> {
         options.encoding = "UTF-8"
+        val standardOptions = options as StandardJavadocDocletOptions
+        standardOptions.addStringOption("Xdoclint:none", "-quiet")
     }
 
     processResources {
@@ -85,7 +88,7 @@ tasks {
                     "pluginDescription" to pluginDescription,
                     "pluginWebsite" to pluginWebsite,
                     "pluginMainClass" to pluginMainClass,
-                    "pluginVersion" to calculatedVersion
+                    "pluginVersion" to version
                 )
             )
         }
@@ -94,7 +97,7 @@ tasks {
             expand(
                 mapOf(
                     "pluginPrefix" to pluginPrefix,
-                    "pluginVersion" to calculatedVersion
+                    "pluginVersion" to version
                 )
             )
         }
