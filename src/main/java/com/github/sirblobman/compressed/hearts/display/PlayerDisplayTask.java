@@ -221,7 +221,7 @@ public final class PlayerDisplayTask extends EntityTaskDetails<Player> {
         double absorptionHealth = getAbsorptionHealth(entity);
         if (absorptionHealth > 0.0D) {
             long absorptionHearts = ceil(absorptionHealth / 2.0D);
-            Replacer replacer = new LongReplacer("{absorb_health}", absorptionHearts);
+            Replacer replacer = new LongReplacer("{absorb_hearts}", absorptionHearts);
             String messagePath = ("display.absorption-hearts-format");
             builder.append(languageManager.getMessage(viewer, messagePath, replacer));
         }

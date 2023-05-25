@@ -8,7 +8,7 @@ update-checker: true
 # If you give access to some commands, players can set their own values
 
 # Should player's hearts be scaled?
-# This means they should only see 20 hearts but they will still have all their health
+# This means they should only see 10 hearts (20 health), but they will still have all their health
 # Default: true
 scale-health: true
 
@@ -25,6 +25,6 @@ always-show: true
 # Default: true
 show-hearts: true
 
-# Should spectators see the health of the player they are spectating?
-# Spectators will still see their own health if they are not spectating a player.
+# Should spectators see the health of the entity they are spectating?
+# Spectators will still see their own health if the entity they are spectating does not have health.
 spectate-health: true
