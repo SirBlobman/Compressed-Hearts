@@ -4,12 +4,12 @@ A plugin that allows you to change the heart scale of your players.
 
 ## Requirements
 
-- [Spigot](https://www.spigotmc.org/) 1.8.8-1.21.5
-- [BlueSlimeCore](https://www.spigotmc.org/resources/83189/) 2.9.6+
+- [Spigot](https://www.spigotmc.org/) v1.8.8-1.21.7
+- [BlueSlimeCore](https://www.spigotmc.org/resources/83189/) v2.9.7
 
 ## Optional Requirements
 
-- [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) 2.11.6+
+- [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) v2.11.6
 
 ## Features
 
