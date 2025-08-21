@@ -39,23 +39,17 @@ public final class ListenerHealth extends PluginListener<HeartsPlugin> {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(EntityDamageEvent e) {
         Entity entity = e.getEntity();
-        if (!(entity instanceof Player)) {
-            return;
+        if (entity instanceof Player player) {
+            check(player);
         }
-
-        Player player = (Player) entity;
-        check(player);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onHeal(EntityRegainHealthEvent e) {
         Entity entity = e.getEntity();
-        if (!(entity instanceof Player)) {
-            return;
+        if (entity instanceof Player player) {
+            check(player);
         }
-
-        Player player = (Player) entity;
-        check(player);
     }
 
     private boolean shouldScaleHealth(@NotNull Player player) {

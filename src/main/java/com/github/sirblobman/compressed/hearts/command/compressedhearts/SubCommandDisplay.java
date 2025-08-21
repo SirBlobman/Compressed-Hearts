@@ -114,13 +114,13 @@ public final class SubCommandDisplay extends PlayerCommand {
         PlayerDataManager playerDataManager = getPlayerDataManager();
         YamlConfiguration playerData = playerDataManager.get(player);
         if (playerData.isSet("display-type")) {
-            String displayTypeString = playerData.getString("display-type");
+            String displayTypeString = playerData.getString("display-type", "NONE");
             return ConfigurationHelper.parseEnum(DisplayType.class, displayTypeString, DisplayType.NONE);
         }
 
         ConfigurationManager configurationManager = getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
-        String displayTypeString = configuration.getString("display-type");
+        String displayTypeString = configuration.getString("display-type", "NONE");
         return ConfigurationHelper.parseEnum(DisplayType.class, displayTypeString, DisplayType.NONE);
     }
 }

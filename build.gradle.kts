@@ -33,9 +33,9 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-    toolchain.languageVersion.set(JavaLanguageVersion.of(8))
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 repositories {
@@ -46,14 +46,8 @@ repositories {
 }
 
 dependencies {
-    // Java Dependencies
-    compileOnly("org.jetbrains:annotations:26.0.2")
-
-    // Spigot API
-    val spigotVersion = fetchProperty("version.spigot", "")
-    compileOnly("org.spigotmc:spigot-api:$spigotVersion")
-
-    // Plugin Dependencies
+    compileOnly("org.jetbrains:annotations:26.0.2") // JetBrains Annotations
+    compileOnly("org.spigotmc:spigot-api:1.21.8-R0.1-SNAPSHOT") // Spigot API
     compileOnly("com.github.sirblobman.api:core:2.9-SNAPSHOT") // BlueSlimeCore
 }
 

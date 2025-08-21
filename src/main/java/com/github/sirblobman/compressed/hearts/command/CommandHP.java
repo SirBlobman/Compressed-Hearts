@@ -97,7 +97,7 @@ public class CommandHP extends PlayerCommand {
         double absorbHealth = playerHandler.getAbsorptionHearts(target);
         long absorbHearts = Math.round(absorbHealth / 2.0D);
         Replacer absorbHealthReplacer = new DoubleReplacer("{absorb_health}", absorbHealth, decimalFormat);
-        Replacer absorbHeartsReplacer = new LongReplacer("{absort_hearts}", absorbHearts);
+        Replacer absorbHeartsReplacer = new LongReplacer("{absorb_hearts}", absorbHearts);
 
         String targetName = target.getName();
         Replacer targetReplacer = new StringReplacer("{target}", targetName);

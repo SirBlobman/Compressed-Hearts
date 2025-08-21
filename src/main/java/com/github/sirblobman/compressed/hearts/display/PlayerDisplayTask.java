@@ -168,14 +168,14 @@ public final class PlayerDisplayTask extends EntityTaskDetails<Player> {
         if (playerDataManager.hasData(player)) {
             YamlConfiguration configuration = playerDataManager.get(player);
             if (configuration.isSet("display-type")) {
-                String displayTypeName = configuration.getString("display-type");
+                String displayTypeName = configuration.getString("display-type", "NONE");
                 return ConfigurationHelper.parseEnum(DisplayType.class, displayTypeName, DisplayType.NONE);
             }
         }
 
         ConfigurationManager configurationManager = getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
-        String displayTypeName = configuration.getString("display-type");
+        String displayTypeName = configuration.getString("display-type", "NONE");
         return ConfigurationHelper.parseEnum(DisplayType.class, displayTypeName, DisplayType.NONE);
     }
 
@@ -243,11 +243,10 @@ public final class PlayerDisplayTask extends EntityTaskDetails<Player> {
     }
 
     private double getAbsorptionHealth(@NotNull LivingEntity entity) {
-        if (!(entity instanceof Player)) {
+        if (!(entity instanceof Player player)) {
             return 0.0D;
         }
 
-        Player player = (Player) entity;
         PlayerHandler playerHandler = getPlayerHandler();
         return playerHandler.getAbsorptionHearts(player);
     }
